@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Learning Center">
 <meta name="theme-color" content="#0c1017">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>Omar's Learning Center</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -54,11 +56,39 @@ select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .fade-in{animation:fadeIn .3s ease both}
 .pop-in{animation:pop .4s cubic-bezier(.175,.885,.32,1.275) both}
 
+/* Pull to refresh */
+#ptr-container{position:relative;overflow:visible}
+#ptr-indicator{
+  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:40px;height:40px;border-radius:50%;
+  background:var(--bg-2);border:1.5px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .2s,transform .3s;z-index:100;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+}
+#ptr-indicator.visible{opacity:1}
+#ptr-indicator.refreshing .ptr-spinner{animation:spin .7s linear infinite}
+#ptr-indicator .ptr-arrow{transition:transform .2s}
+#ptr-indicator.ready .ptr-arrow{transform:rotate(180deg)}
+.ptr-spinner{width:20px;height:20px;border:2.5px solid rgba(96,165,250,0.2);border-top-color:var(--blue);border-radius:50%}
+.ptr-arrow{width:0;height:0}
+#ptr-indicator svg{transition:transform .2s}
+#ptr-indicator.ready svg{transform:rotate(180deg)}
+
+/* Last updated badge */
+.last-updated{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:8px;
+  background:var(--bg-2);font-size:11px;color:var(--text-3);
+  font-weight:600;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bg-3);border-radius:4px}
 
+html{overscroll-behavior-y:contain}
 @media(min-width:768px){#root{padding:32px 24px 48px}}
 </style>
 </head>
@@ -69,6 +99,64 @@ select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <script type="text/babel">
 const{useState,useEffect,useCallback,useRef}=React;
+
+/* ─── Pull to Refresh ─── */
+function usePullToRefresh(){
+  const [pulling,setPulling]=useState(false);
+  const [pullDist,setPullDist]=useState(0);
+  const [refreshing,setRefreshing]=useState(false);
+  const [lastRefresh,setLastRefresh]=useState(null);
+  const startY=useRef(0);
+  const currentY=useRef(0);
+  const isPulling=useRef(false);
+  const threshold=80;
+
+  useEffect(()=>{
+    function onTouchStart(e){
+      if(window.scrollY>5)return;
+      startY.current=e.touches[0].clientY;
+      isPulling.current=true;
+    }
+    function onTouchMove(e){
+      if(!isPulling.current||window.scrollY>5)return;
+      currentY.current=e.touches[0].clientY;
+      const dist=Math.max(0,currentY.current-startY.current);
+      if(dist>10){
+        e.preventDefault();
+        const dampened=Math.min(dist*0.5,120);
+        setPullDist(dampened);
+        setPulling(true);
+      }
+    }
+    function onTouchEnd(){
+      if(!isPulling.current)return;
+      isPulling.current=false;
+      if(pullDist>=threshold*0.5){
+        setRefreshing(true);
+        setPullDist(50);
+        setTimeout(()=>{
+          window.location.reload();
+        },600);
+      }else{
+        setPulling(false);
+        setPullDist(0);
+      }
+    }
+    document.addEventListener("touchstart",onTouchStart,{passive:true});
+    document.addEventListener("touchmove",onTouchMove,{passive:false});
+    document.addEventListener("touchend",onTouchEnd,{passive:true});
+    return()=>{
+      document.removeEventListener("touchstart",onTouchStart);
+      document.removeEventListener("touchmove",onTouchMove);
+      document.removeEventListener("touchend",onTouchEnd);
+    };
+  },[pullDist]);
+
+  return{pulling,pullDist,refreshing,threshold};
+}
+
+const BUILD_VERSION="v1.0";
+const BUILD_DATE="Mar 27, 2026";
 
 /* ─── Storage ─── */
 const SK="omar-lc-v5",PK="omar-plan-v5";
@@ -512,11 +600,30 @@ function App(){
       </div>})}
     </div>}
 
-    <div style={{textAlign:"center",marginTop:32,fontSize:11,color:"var(--text-3)",fontWeight:500}}>Built with care · Add new topics anytime</div>
+    <div style={{textAlign:"center",marginTop:32,fontSize:11,color:"var(--text-3)",fontWeight:500}}>
+      Built with care · {BUILD_VERSION} · {BUILD_DATE}
+    </div>
+    <div style={{textAlign:"center",marginTop:8,fontSize:10,color:"var(--text-3)",opacity:0.5}}>
+      Pull down to refresh for updates
+    </div>
   </div>;
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+function PullWrapper({children}){
+  const{pulling,pullDist,refreshing,threshold}=usePullToRefresh();
+  const ready=pullDist>=threshold*0.5;
+  return<div id="ptr-container" style={{transform:pulling?`translateY(${pullDist}px)`:"translateY(0)",transition:pulling?"none":"transform .3s cubic-bezier(.4,0,.2,1)"}}>
+    <div id="ptr-indicator" className={(pulling||refreshing?"visible":"")+(refreshing?" refreshing":"")+(ready&&!refreshing?" ready":"")} style={{transform:`translateX(-50%) translateY(${pulling?0:-20}px)`,opacity:pulling||refreshing?Math.min(pullDist/30,1):0}}>
+      {refreshing
+        ?<div className="ptr-spinner"/>
+        :<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2.5" strokeLinecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      }
+    </div>
+    {children}
+  </div>
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<PullWrapper><App/></PullWrapper>);
 </script>
 </body>
 </html>
