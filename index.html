@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Omar's LC">
+<title>Omar's Learning Center</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg-deep: #0a0e17;
+    --bg-mid: #0f1520;
+    --bg-surface: #111827;
+    --text-primary: #e2e8f0;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b8db5;
+    --text-dim: #4a5568;
+    --blue: #3b82f6;
+    --blue-light: #93c5fd;
+    --green: #22c55e;
+    --green-light: #86efac;
+    --amber: #f59e0b;
+    --amber-light: #fbbf24;
+    --red: #ef4444;
+    --red-light: #fca5a5;
+    --purple: #8b5cf6;
+    --purple-light: #c4b5fd;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-light: rgba(255,255,255,0.1);
+  }
+  
+  body {
+    font-family: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(145deg, var(--bg-deep) 0%, var(--bg-mid) 40%, var(--bg-surface) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  #root { max-width: 600px; margin: 0 auto; padding: 24px 16px 100px; }
+  
+  input, select, textarea {
+    outline: none;
+    font-family: inherit;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: rgba(59,130,246,0.4) !important;
+  }
+  
+  button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  
+  .fade-up { animation: fadeUp 0.3s ease; }
+  
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2a3a4a; border-radius: 4px; }
+  
+  /* iPad optimizations */
+  @media (min-width: 768px) {
+    #root { padding: 32px 24px 100px; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const STORAGE_KEY = "omar-lc-v4";
+const PLAN_KEY = "omar-plan-v4";
+
+// Helpers
+function loadData(key, fallback) {
+  try { var d = localStorage.getItem(key); return d ? JSON.parse(d) : fallback; }
+  catch(e) { return fallback; }
+}
+function saveData(key, data) {
+  try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+}
+
+function getSubjectInfo(text) {
+  var lower = (text || "").toLowerCase();
+  var map = [
+    [["math","science","inheritance","traits","organisms"], { label:"Math & Science", emoji:"🔬", color:"#0a4a1e", border:"#1a8a3e", accent:"#4ade80" }],
+    [["spanish","español"], { label:"Spanish", emoji:"🇪🇸", color:"#4a2a0a", border:"#8a5a1a", accent:"#fbbf24" }],
+    [["ela","reading","english","writing","grammar","vocabulary"], { label:"ELA / Reading", emoji:"📖", color:"#0a2a4a", border:"#1a5a8a", accent:"#60a5fa" }],
+    [["social","history","geography","civics","economy","market","goods"], { label:"Social Studies", emoji:"🌍", color:"#3a0a4a", border:"#6a1a8a", accent:"#c084fc" }],
+  ];
+  for (var i = 0; i < map.length; i++) {
+    if (map[i][0].some(k => lower.includes(k))) return map[i][1];
+  }
+  return { label:"General", emoji:"📝", color:"#1a2a3a", border:"#3a5a7a", accent:"#94a3b8" };
+}
+
+function daysUntil(d) {
+  if (!d) return null;
+  var t = new Date(d+"T00:00:00"), n = new Date();
+  n.setHours(0,0,0,0);
+  return Math.ceil((t-n)/86400000);
+}
+
+function fmtDate(d) {
+  if (!d) return "Date TBD";
+  return new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+}
+
+function urgColor(d) {
+  if (d===null) return "#6b7280";
+  if (d<=2) return "#ef4444";
+  if (d<=5) return "#f59e0b";
+  return "#22c55e";
+}
+
+function shuffle(a) {
+  var b=a.slice();
+  for (var i=b.length-1;i>0;i--) { var j=Math.floor(Math.random()*(i+1)); var t=b[i]; b[i]=b[j]; b[j]=t; }
+  return b;
+}
+
+var DEFAULT_TESTS = [
+  { id:"t1", subject:"Math & Science", topic:"Inheritance & Traits", date:"2026-04-01", notes:"Study inherited vs learned traits, dominant/recessive", studyGuide:[] },
+  { id:"t2", subject:"Social Studies", topic:"Markets & Economy (Lesson 9)", date:"2026-04-02", notes:"Vocab: economy, free market economy, services, goods, scarcity, market", studyGuide:[
+    {term:"Market",def:"A place where people buy and sell things"},
+    {term:"Competition",def:"You can compete with other sellers by lowering your prices"},
+    {term:"Economy",def:"When you buy or sell something, you are part of the economy. It can be big or small"},
+    {term:"Goods",def:"Items that can be bought, sold, or traded (toys, food, clothing) — things you can see or touch"},
+    {term:"Services",def:"Tasks you pay someone to do for you (hair dresser, lawn care, house cleaning, face painting)"},
+    {term:"Free Market Economy",def:"Where the choices are left to the buyer and the seller"},
+    {term:"Scarcity",def:"Farmers cannot grow as much as the customer wants — they are limited to what their crop can produce each year"},
+  ]}
+];
+
+var inputStyle = {
+  width:"100%", padding:"12px", background:"rgba(15,20,35,0.8)",
+  border:"1px solid rgba(255,255,255,0.1)", borderRadius:10,
+  color:"#e2e8f0", fontSize:14, boxSizing:"border-box", fontFamily:"inherit"
+};
+
+function App() {
+  var [tests,setTests] = useState([]);
+  var [studyPlan,setStudyPlan] = useState(null);
+  var [view,setView] = useState("home");
+  var [selectedTest,setSelectedTest] = useState(null);
+  var [activeTestId,setActiveTestId] = useState(null);
+  var [emailText,setEmailText] = useState("");
+  var [extracting,setExtracting] = useState(false);
+  var [planLoading,setPlanLoading] = useState(false);
+  var [newTest,setNewTest] = useState({subject:"",topic:"",date:"",notes:""});
+  var [newTerm,setNewTerm] = useState("");
+  var [newDef,setNewDef] = useState("");
+  var [editIdx,setEditIdx] = useState(null);
+  var [editTerm,setEditTerm] = useState("");
+  var [editDef,setEditDef] = useState("");
+
+  // Quiz
+  var [quizType,setQuizType] = useState(null);
+  var [quizData,setQuizData] = useState(null);
+  var [qIdx,setQIdx] = useState(0);
+  var [score,setScore] = useState(0);
+  var [answered,setAnswered] = useState(false);
+  var [userAnswer,setUserAnswer] = useState(null);
+  var [fillInput,setFillInput] = useState("");
+  var [matchSelections,setMatchSelections] = useState({});
+  var [matchSubmitted,setMatchSubmitted] = useState(false);
+  var [showHelp,setShowHelp] = useState(false);
+
+  // Load
+  useEffect(() => {
+    var saved = loadData(STORAGE_KEY, null);
+    if (saved && saved.length > 0) {
+      // Merge defaults
+      var merged = DEFAULT_TESTS.map(dt => {
+        var ex = saved.find(s => s.id === dt.id);
+        return ex ? {...dt,...ex, studyGuide:(ex.studyGuide && ex.studyGuide.length>0)?ex.studyGuide:dt.studyGuide} : dt;
+      });
+      saved.forEach(s => { if (!merged.find(m => m.id === s.id)) merged.push(s); });
+      setTests(merged);
+    } else {
+      setTests(DEFAULT_TESTS);
+      saveData(STORAGE_KEY, DEFAULT_TESTS);
+    }
+    setStudyPlan(loadData(PLAN_KEY, null));
+  }, []);
+
+  var save = useCallback((u) => { setTests(u); saveData(STORAGE_KEY, u); }, []);
+
+  var addTest = () => {
+    if (!newTest.topic.trim()) return;
+    var t = {...newTest, id:Date.now().toString(), studyGuide:[]};
+    var u = [...tests, t].sort((a,b)=>(a.date||"z").localeCompare(b.date||"z"));
+    save(u);
+    setNewTest({subject:"",topic:"",date:"",notes:""});
+    setView("home");
+  };
+
+  var deleteTest = (id) => { save(tests.filter(t=>t.id!==id)); setSelectedTest(null); };
+
+  // Study guide editing
+  var addGuideItem = () => {
+    if (!newTerm.trim()||!newDef.trim()) return;
+    save(tests.map(t => t.id!==activeTestId ? t : {...t, studyGuide:[...(t.studyGuide||[]),{term:newTerm.trim(),def:newDef.trim()}]}));
+    setNewTerm(""); setNewDef("");
+  };
+
+  var updateGuideItem = (idx) => {
+    if (!editTerm.trim()||!editDef.trim()) return;
+    save(tests.map(t => t.id!==activeTestId ? t : {...t, studyGuide:(t.studyGuide||[]).map((item,i)=>i===idx?{term:editTerm.trim(),def:editDef.trim()}:item)}));
+    setEditIdx(null);
+  };
+
+  var deleteGuideItem = (idx) => {
+    save(tests.map(t => t.id!==activeTestId ? t : {...t, studyGuide:(t.studyGuide||[]).filter((_,i)=>i!==idx)}));
+  };
+
+  // Email extract
+  var extractFromEmail = async () => {
+    if (!emailText.trim()||emailText.trim().length<20) return;
+    setExtracting(true);
+    try {
+      var res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:"Extract test/quiz info from this school content for a 3rd grader. Today is "+new Date().toISOString().split("T")[0]+", year is 2026.\n\n"+emailText.slice(0,3000)+"\n\nRespond ONLY JSON array, no markdown/backticks.\n[{\"subject\":\"Social Studies\",\"topic\":\"Topic\",\"date\":\"2026-04-05\",\"notes\":\"Notes\",\"studyGuide\":[{\"term\":\"Word\",\"def\":\"Definition\"}]}]\nInclude studyGuide if vocab/key terms exist. If no tests: []"}]})});
+      if (!res.ok) throw new Error("API "+res.status);
+      var data = await res.json();
+      var text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").replace(/```json|```/g,"").trim();
+      var parsed = JSON.parse(text);
+      if (Array.isArray(parsed)&&parsed.length>0) {
+        var nt = parsed.filter(t=>t&&t.topic).map(t=>({...t,id:Date.now()+"-"+Math.random().toString(36).slice(2,6),studyGuide:t.studyGuide||[]}));
+        save([...tests,...nt].sort((a,b)=>(a.date||"z").localeCompare(b.date||"z")));
+        setEmailText(""); setView("home");
+      } else alert("No tests found in that content.");
+    } catch(err) { alert("Error: "+err.message); }
+    setExtracting(false);
+  };
+
+  // Study plan
+  var generatePlan = async () => {
+    var up = tests.filter(t=>daysUntil(t.date)>=0);
+    if (up.length===0) return;
+    setPlanLoading(true);
+    try {
+      var res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:"Study plan for Omar, 3rd grader. Today: "+new Date().toISOString().split("T")[0]+".\nTests: "+JSON.stringify(up)+"\nRules: 15-20 min sessions, age-appropriate activities (flashcards, drawing, sorting games, verbal quizzes with parents), stagger back-to-back tests.\nONLY JSON array, no markdown.\n[{\"day\":\"YYYY-MM-DD\",\"dayLabel\":\"Mon, Apr 1\",\"tasks\":[{\"subject\":\"Math & Science\",\"activity\":\"Draw traits chart\",\"duration\":\"15 min\"}]}]"}]})});
+      if (!res.ok) throw new Error("API "+res.status);
+      var data = await res.json();
+      var text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").replace(/```json|```/g,"").trim();
+      var plan = JSON.parse(text);
+      var pa = Array.isArray(plan)?plan:[plan];
+      setStudyPlan(pa);
+      saveData(PLAN_KEY, pa);
+    } catch(err) { alert("Error: "+err.message); }
+    setPlanLoading(false);
+  };
+
+  // Quiz
+  var startQuiz = (testId, type) => {
+    var test = tests.find(t=>t.id===testId);
+    if (!test||!test.studyGuide||test.studyGuide.length<2) return;
+    setActiveTestId(testId); setQuizType(type);
+    setQIdx(0); setScore(0); setAnswered(false); setUserAnswer(null); setFillInput("");
+    setMatchSelections({}); setMatchSubmitted(false);
+    var sg = test.studyGuide;
+    if (type==="mc") {
+      setQuizData(shuffle(sg).map(item => {
+        var wrong = shuffle(sg.filter(x=>x.term!==item.term)).slice(0,3);
+        return {term:item.term, options:shuffle([{text:item.def,correct:true},...wrong.map(w=>({text:w.def,correct:false}))])};
+      }));
+    } else if (type==="tf") {
+      var qs = [];
+      sg.forEach(item => {
+        qs.push({term:item.term,shown:item.def,correct:true});
+        var w = shuffle(sg.filter(x=>x.term!==item.term))[0];
+        if (w) qs.push({term:item.term,shown:w.def,correct:false});
+      });
+      setQuizData(shuffle(qs).slice(0,Math.min(10,sg.length*2)));
+    } else if (type==="fill") {
+      setQuizData(shuffle(sg).map(item=>({term:item.term,def:item.def})));
+    } else if (type==="match") {
+      var items = shuffle(sg).slice(0,Math.min(6,sg.length));
+      setQuizData({terms:items.map(i=>i.term),defs:shuffle(items.map(i=>i.def)),correct:items});
+    }
+    setView("quiz");
+  };
+
+  var checkFill = () => {
+    if (!quizData||!quizData[qIdx]) return;
+    var ans = fillInput.trim().toLowerCase();
+    var correct = quizData[qIdx].term.toLowerCase();
+    var ok = correct.includes(ans)||ans.includes(correct)||(ans.length>2&&correct.split(" ").some(w=>w.toLowerCase()===ans));
+    setAnswered(true); setUserAnswer(ok);
+    if (ok) setScore(s=>s+1);
+  };
+
+  var nextQ = () => { setQIdx(i=>i+1); setAnswered(false); setUserAnswer(null); setFillInput(""); };
+
+  var checkMatch = () => {
+    var c = 0;
+    quizData.correct.forEach(item => { if (matchSelections[item.term]===item.def) c++; });
+    setScore(c); setMatchSubmitted(true);
+  };
+
+  var activeTest = tests.find(t=>t.id===activeTestId);
+  var upcoming = tests.filter(t=>daysUntil(t.date)===null||daysUntil(t.date)>=0);
+  var past = tests.filter(t=>daysUntil(t.date)!==null&&daysUntil(t.date)<0);
+
+  // ===== QUIZ VIEW =====
+  if (view==="quiz"&&quizData) {
+    var testInfo = activeTest ? getSubjectInfo(activeTest.topic+" "+activeTest.subject) : {};
+    var total = quizType==="match" ? quizData.correct.length : quizData.length;
+    var isFinished = quizType==="match" ? matchSubmitted : (qIdx>=total);
+    var showingQ = quizType!=="match"&&qIdx<total;
+
+    return (
+      <div className="fade-up">
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+          <button onClick={()=>{setView("home");setQuizType(null);}} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
+          <div style={{flex:1}}>
+            <div style={{fontSize:15,fontWeight:600}}>{activeTest?activeTest.topic:"Quiz"}</div>
+            <div style={{fontSize:12,color:"#9ca3af"}}>
+              {quizType==="mc"&&"Multiple Choice"}{quizType==="tf"&&"True or False"}{quizType==="fill"&&"Fill in the Blank"}{quizType==="match"&&"Matching"}
+            </div>
+          </div>
+          {!isFinished&&quizType!=="match"&&<div style={{fontSize:13,color:"#9ca3af"}}>{qIdx+1}/{total}</div>}
+        </div>
+
+        {quizType!=="match"&&(
+          <div style={{background:"rgba(255,255,255,0.06)",borderRadius:4,height:5,marginBottom:20,overflow:"hidden"}}>
+            <div style={{background:"linear-gradient(90deg,#3b82f6,#8b5cf6)",height:"100%",borderRadius:4,width:((qIdx+(answered?1:0))/total*100)+"%",transition:"width 0.3s"}} />
+          </div>
+        )}
+
+        {isFinished&&(
+          <div style={{textAlign:"center",padding:"30px 20px"}} className="fade-up">
+            <div style={{fontSize:48,marginBottom:12}}>{score>=total*0.8?"🌟":score>=total*0.5?"👍":"📚"}</div>
+            <div style={{fontSize:28,fontWeight:700}}>{score}/{total}</div>
+            <div style={{fontSize:14,color:"#9ca3af",marginTop:6,marginBottom:24}}>
+              {score>=total*0.8?"Amazing job, Omar!":score>=total*0.5?"Good effort! Let's review a few.":"Let's practice more!"}
+            </div>
+            <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
+              <button onClick={()=>startQuiz(activeTestId,quizType)} style={{padding:"10px 20px",background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:13,fontWeight:600,cursor:"pointer"}}>Try Again</button>
+              <button onClick={()=>{setView("home");setQuizType(null);}} style={{padding:"10px 20px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:10,color:"#e2e8f0",fontSize:13,fontWeight:600,cursor:"pointer"}}>Done</button>
+            </div>
+          </div>
+        )}
+
+        {quizType==="mc"&&showingQ&&(
+          <div className="fade-up">
+            <div style={{background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:16,padding:"20px 18px",marginBottom:16,textAlign:"center"}}>
+              <div style={{fontSize:11,color:"#a78bfa",textTransform:"uppercase",letterSpacing:2,marginBottom:8}}>What is</div>
+              <div style={{fontSize:20,fontWeight:700}}>{quizData[qIdx].term}?</div>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {quizData[qIdx].options.map((opt,i) => {
+                var bg="rgba(15,20,35,0.6)",bdr="rgba(255,255,255,0.08)";
+                if (answered&&opt.correct){bg="rgba(34,197,94,0.15)";bdr="rgba(34,197,94,0.4)";}
+                else if(answered&&userAnswer===i&&!opt.correct){bg="rgba(239,68,68,0.15)";bdr="rgba(239,68,68,0.4)";}
+                return <button key={i} onClick={()=>{if(answered)return;setAnswered(true);setUserAnswer(i);if(opt.correct)setScore(s=>s+1);}} style={{padding:"12px 14px",background:bg,border:"1px solid "+bdr,borderRadius:10,color:"#e2e8f0",fontSize:13,textAlign:"left",cursor:answered?"default":"pointer",lineHeight:1.4}}>
+                  {answered&&opt.correct&&"✅ "}{answered&&userAnswer===i&&!opt.correct&&"❌ "}{opt.text}
+                </button>;
+              })}
+            </div>
+            {answered&&qIdx<total-1&&<button onClick={nextQ} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:14,fontWeight:600,cursor:"pointer"}}>Next →</button>}
+            {answered&&qIdx===total-1&&<button onClick={()=>setQIdx(total)} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:10,color:"#86efac",fontSize:14,fontWeight:600,cursor:"pointer"}}>See Results</button>}
+          </div>
+        )}
+
+        {quizType==="tf"&&showingQ&&(
+          <div className="fade-up">
+            <div style={{background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:16,padding:"20px 18px",marginBottom:10,textAlign:"center"}}>
+              <div style={{fontSize:13,color:"#a78bfa",marginBottom:8}}>Is this the correct definition of</div>
+              <div style={{fontSize:20,fontWeight:700,marginBottom:12}}>{quizData[qIdx].term}?</div>
+              <div style={{fontSize:14,color:"#cbd5e1",lineHeight:1.5,fontStyle:"italic"}}>"{quizData[qIdx].shown}"</div>
+            </div>
+            {answered&&<div style={{textAlign:"center",padding:8,marginBottom:8,fontSize:13,color:userAnswer===quizData[qIdx].correct?"#86efac":"#fca5a5"}}>{userAnswer===quizData[qIdx].correct?"✅ Correct!":"❌ Incorrect"}</div>}
+            <div style={{display:"flex",gap:10}}>
+              {[true,false].map(val => {
+                var bg="rgba(15,20,35,0.6)",bdr="rgba(255,255,255,0.08)";
+                if(answered&&val===quizData[qIdx].correct){bg="rgba(34,197,94,0.15)";bdr="rgba(34,197,94,0.4)";}
+                else if(answered&&userAnswer===val&&val!==quizData[qIdx].correct){bg="rgba(239,68,68,0.15)";bdr="rgba(239,68,68,0.4)";}
+                return <button key={String(val)} onClick={()=>{if(answered)return;setAnswered(true);setUserAnswer(val);if(val===quizData[qIdx].correct)setScore(s=>s+1);}} style={{flex:1,padding:"16px",background:bg,border:"1px solid "+bdr,borderRadius:12,color:"#e2e8f0",fontSize:16,fontWeight:600,cursor:answered?"default":"pointer"}}>
+                  {val?"👍 True":"👎 False"}
+                </button>;
+              })}
+            </div>
+            {answered&&qIdx<total-1&&<button onClick={nextQ} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:14,fontWeight:600,cursor:"pointer"}}>Next →</button>}
+            {answered&&qIdx===total-1&&<button onClick={()=>setQIdx(total)} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:10,color:"#86efac",fontSize:14,fontWeight:600,cursor:"pointer"}}>See Results</button>}
+          </div>
+        )}
+
+        {quizType==="fill"&&showingQ&&(
+          <div className="fade-up">
+            <div style={{background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:16,padding:"20px 18px",marginBottom:16}}>
+              <div style={{fontSize:11,color:"#a78bfa",textTransform:"uppercase",letterSpacing:2,marginBottom:8}}>What term matches this definition?</div>
+              <div style={{fontSize:15,color:"#e2e8f0",lineHeight:1.5}}>{quizData[qIdx].def}</div>
+            </div>
+            <input value={fillInput} onChange={e=>setFillInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!answered)checkFill();}} placeholder="Type your answer..." disabled={answered} style={{...inputStyle,marginBottom:10,opacity:answered?0.6:1}} />
+            {answered&&<div style={{padding:"10px 14px",marginBottom:10,borderRadius:8,background:userAnswer?"rgba(34,197,94,0.15)":"rgba(239,68,68,0.15)",border:"1px solid "+(userAnswer?"rgba(34,197,94,0.3)":"rgba(239,68,68,0.3)"),fontSize:13}}>{userAnswer?"✅ Correct!":<span>❌ The answer is: <strong>{quizData[qIdx].term}</strong></span>}</div>}
+            {!answered&&<button onClick={checkFill} disabled={!fillInput.trim()} style={{width:"100%",padding:"12px",background:fillInput.trim()?"rgba(139,92,246,0.2)":"rgba(15,20,35,0.5)",border:"1px solid "+(fillInput.trim()?"rgba(139,92,246,0.4)":"rgba(255,255,255,0.06)"),borderRadius:10,color:fillInput.trim()?"#c4b5fd":"#4a5568",fontSize:14,fontWeight:600,cursor:fillInput.trim()?"pointer":"default"}}>Check</button>}
+            {answered&&qIdx<total-1&&<button onClick={nextQ} style={{width:"100%",padding:"12px",background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:14,fontWeight:600,cursor:"pointer"}}>Next →</button>}
+            {answered&&qIdx===total-1&&<button onClick={()=>setQIdx(total)} style={{width:"100%",padding:"12px",background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:10,color:"#86efac",fontSize:14,fontWeight:600,cursor:"pointer"}}>See Results</button>}
+          </div>
+        )}
+
+        {quizType==="match"&&!matchSubmitted&&(
+          <div className="fade-up">
+            <div style={{fontSize:13,color:"#9ca3af",marginBottom:14}}>Match each term with its correct definition.</div>
+            {quizData.terms.map((term,i) => (
+              <div key={i} style={{marginBottom:12}}>
+                <div style={{fontSize:14,fontWeight:600,color:testInfo.accent||"#c4b5fd",marginBottom:6}}>{term}</div>
+                <select value={matchSelections[term]||""} onChange={e=>setMatchSelections(s=>({...s,[term]:e.target.value}))} style={{...inputStyle,fontSize:13,padding:10}}>
+                  <option value="">Select definition...</option>
+                  {quizData.defs.map((d,di) => <option key={di} value={d}>{d.length>60?d.slice(0,57)+"...":d}</option>)}
+                </select>
+              </div>
+            ))}
+            <button onClick={checkMatch} disabled={Object.keys(matchSelections).length<quizData.terms.length} style={{width:"100%",padding:"14px",marginTop:8,background:Object.keys(matchSelections).length>=quizData.terms.length?"rgba(34,197,94,0.15)":"rgba(15,20,35,0.5)",border:"1px solid "+(Object.keys(matchSelections).length>=quizData.terms.length?"rgba(34,197,94,0.3)":"rgba(255,255,255,0.06)"),borderRadius:12,color:Object.keys(matchSelections).length>=quizData.terms.length?"#86efac":"#4a5568",fontSize:14,fontWeight:600,cursor:Object.keys(matchSelections).length>=quizData.terms.length?"pointer":"default"}}>Check Answers</button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ===== EDIT GUIDE =====
+  if (view==="editGuide"&&activeTest) {
+    var info = getSubjectInfo(activeTest.topic+" "+activeTest.subject);
+    var guide = activeTest.studyGuide||[];
+    return (
+      <div className="fade-up">
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
+          <button onClick={()=>{setView("home");setEditIdx(null);}} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
+          <div>
+            <div style={{fontSize:16,fontWeight:600}}>{activeTest.topic}</div>
+            <div style={{fontSize:12,color:"#9ca3af"}}>{info.emoji} Study Material · {guide.length} item{guide.length!==1?"s":""}</div>
+          </div>
+        </div>
+
+        {guide.map((item,i) => {
+          if (editIdx===i) return (
+            <div key={i} style={{background:"rgba(59,130,246,0.08)",border:"1px solid rgba(59,130,246,0.25)",borderRadius:12,padding:14,marginBottom:8}}>
+              <input value={editTerm} onChange={e=>setEditTerm(e.target.value)} placeholder="Term" style={{...inputStyle,marginBottom:8,fontSize:13}} />
+              <textarea value={editDef} onChange={e=>setEditDef(e.target.value)} placeholder="Definition" rows={2} style={{...inputStyle,fontSize:13,resize:"vertical"}} />
+              <div style={{display:"flex",gap:8,marginTop:8}}>
+                <button onClick={()=>updateGuideItem(i)} style={{padding:"6px 14px",background:"rgba(34,197,94,0.2)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:8,color:"#86efac",fontSize:12,cursor:"pointer"}}>Save</button>
+                <button onClick={()=>setEditIdx(null)} style={{padding:"6px 14px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:8,color:"#9ca3af",fontSize:12,cursor:"pointer"}}>Cancel</button>
+              </div>
+            </div>
+          );
+          return (
+            <div key={i} style={{background:"rgba(0,0,0,0.2)",borderRadius:10,padding:"10px 12px",marginBottom:6,display:"flex",alignItems:"flex-start",gap:10}}>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:600,color:info.accent}}>{item.term}</div>
+                <div style={{fontSize:12,color:"#9ca3af",marginTop:2,lineHeight:1.4}}>{item.def}</div>
+              </div>
+              <div style={{display:"flex",gap:6,flexShrink:0}}>
+                <button onClick={()=>{setEditIdx(i);setEditTerm(item.term);setEditDef(item.def);}} style={{background:"none",border:"none",color:"#6b8db5",cursor:"pointer",fontSize:14,padding:2}}>✏️</button>
+                <button onClick={()=>deleteGuideItem(i)} style={{background:"none",border:"none",color:"#6b8db5",cursor:"pointer",fontSize:14,padding:2}}>🗑️</button>
+              </div>
+            </div>
+          );
+        })}
+
+        <div style={{background:"rgba(34,197,94,0.06)",border:"1px dashed rgba(34,197,94,0.25)",borderRadius:12,padding:14,marginTop:12}}>
+          <div style={{fontSize:12,color:"#86efac",fontWeight:600,marginBottom:8}}>+ Add Study Material</div>
+          <input value={newTerm} onChange={e=>setNewTerm(e.target.value)} placeholder="Term (e.g. Scarcity)" style={{...inputStyle,marginBottom:8,fontSize:13}} />
+          <textarea value={newDef} onChange={e=>setNewDef(e.target.value)} placeholder="Definition..." rows={2} style={{...inputStyle,fontSize:13,resize:"vertical"}} />
+          <button onClick={addGuideItem} disabled={!newTerm.trim()||!newDef.trim()} style={{marginTop:8,padding:"8px 18px",background:(newTerm.trim()&&newDef.trim())?"rgba(34,197,94,0.2)":"rgba(15,20,35,0.5)",border:"1px solid "+((newTerm.trim()&&newDef.trim())?"rgba(34,197,94,0.3)":"rgba(255,255,255,0.06)"),borderRadius:8,color:(newTerm.trim()&&newDef.trim())?"#86efac":"#4a5568",fontSize:13,fontWeight:600,cursor:(newTerm.trim()&&newDef.trim())?"pointer":"default"}}>Add</button>
+        </div>
+      </div>
+    );
+  }
+
+  // ===== HOME =====
+  return (
+    <div>
+      {/* Header */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
+        <div style={{display:"flex",alignItems:"center",gap:14}}>
+          <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#f59e0b,#d97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,fontWeight:700,color:"#fff",boxShadow:"0 4px 16px rgba(245,158,11,0.3)"}}>O</div>
+          <div>
+            <h1 style={{margin:0,fontSize:20,fontWeight:700,letterSpacing:"-0.3px"}}>Omar's Learning Center</h1>
+            <p style={{margin:0,fontSize:13,color:"#9ca3af"}}>3rd Grade · Cedar Hill Prep</p>
+          </div>
+        </div>
+        <button onClick={()=>setShowHelp(!showHelp)} style={{background:"none",border:"none",color:"#6b8db5",fontSize:20,cursor:"pointer",padding:4}} title="How to use">❓</button>
+      </div>
+
+      {/* Help panel */}
+      {showHelp&&(
+        <div className="fade-up" style={{background:"rgba(59,130,246,0.08)",border:"1px solid rgba(59,130,246,0.2)",borderRadius:14,padding:16,marginBottom:20,fontSize:13,lineHeight:1.6,color:"#b0bec5"}}>
+          <div style={{fontWeight:600,color:"#93c5fd",marginBottom:8,fontSize:14}}>How to Use</div>
+          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>📸 Photo a study guide</strong> → Send it to Mom/Dad in Claude → They update the Learning Center</div>
+          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>+ Add Test</strong> → Manually add a new test with subject, topic, and date</div>
+          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>📧 Paste Email</strong> → Paste a teacher email and AI extracts the test info</div>
+          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>✏️ Edit Study Material</strong> → Add, edit, or delete vocab terms for any test</div>
+          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>🧠 Quiz Me</strong> → 4 quiz types to practice: Multiple Choice, True/False, Fill in Blank, Matching</div>
+          <div><strong style={{color:"#e2e8f0"}}>📋 Study Plan</strong> → Generates a day-by-day study schedule with 15–20 min sessions</div>
+          <button onClick={()=>setShowHelp(false)} style={{marginTop:10,background:"none",border:"none",color:"#6b8db5",fontSize:12,cursor:"pointer",textDecoration:"underline"}}>Close</button>
+        </div>
+      )}
+
+      {view==="home"&&(
+        <>
+          <div style={{display:"flex",gap:8,marginBottom:20}}>
+            <button onClick={()=>setView("add")} style={{flex:1,padding:"12px",background:"rgba(59,130,246,0.12)",border:"1px solid rgba(59,130,246,0.25)",borderRadius:12,color:"#93c5fd",fontSize:13,fontWeight:600,cursor:"pointer"}}>+ Add Test</button>
+            <button onClick={()=>setView("paste")} style={{flex:1,padding:"12px",background:"rgba(168,85,247,0.12)",border:"1px solid rgba(168,85,247,0.25)",borderRadius:12,color:"#c4b5fd",fontSize:13,fontWeight:600,cursor:"pointer"}}>📧 Paste Email</button>
+          </div>
+
+          {upcoming.length>0&&(
+            <>
+              <h2 style={{margin:"0 0 12px",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:"#9ca3af"}}>Upcoming Tests ({upcoming.length})</h2>
+              {upcoming.map(test => {
+                var info = getSubjectInfo(test.topic+" "+test.subject);
+                var days = daysUntil(test.date);
+                var sel = selectedTest===test.id;
+                var hasGuide = test.studyGuide&&test.studyGuide.length>0;
+                var count = hasGuide?test.studyGuide.length:0;
+                return (
+                  <div key={test.id} onClick={()=>setSelectedTest(sel?null:test.id)} className="fade-up" style={{
+                    background:"linear-gradient(135deg,"+info.color+","+info.color+"ee)",
+                    border:"1px solid "+info.border, borderLeft:"4px solid "+urgColor(days),
+                    borderRadius:14, padding:16, marginBottom:10, cursor:"pointer",
+                  }}>
+                    <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between"}}>
+                      <div style={{flex:1}}>
+                        <div style={{fontSize:16,fontWeight:600,marginBottom:4}}>{test.topic||test.subject}</div>
+                        <div style={{fontSize:12,color:"#9ca3af"}}>
+                          {info.emoji} {info.label} · {fmtDate(test.date)}
+                          {hasGuide&&<span style={{color:info.accent}}> · {count} terms</span>}
+                        </div>
+                        {days!==null&&days>=0&&days<=3&&<div style={{fontSize:11,color:urgColor(days),fontWeight:600,marginTop:4}}>{days===0?"Today!":days===1?"Tomorrow":"Soon"}</div>}
+                      </div>
+                      {days!==null&&days>=0&&(
+                        <div style={{background:urgColor(days)+"18",border:"1px solid "+urgColor(days)+"44",borderRadius:10,padding:"6px 12px",textAlign:"center",minWidth:48}}>
+                          <div style={{fontSize:20,fontWeight:700,color:urgColor(days),lineHeight:1}}>{days}</div>
+                          <div style={{fontSize:9,color:"#9ca3af",textTransform:"uppercase",letterSpacing:1}}>days</div>
+                        </div>
+                      )}
+                    </div>
+
+                    {sel&&(
+                      <div style={{marginTop:12,paddingTop:12,borderTop:"1px solid "+info.border+"44"}}>
+                        {test.notes&&<div style={{fontSize:13,color:"#b0bec5",marginBottom:10}}>📌 {test.notes}</div>}
+                        <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:hasGuide?12:0}}>
+                          <button onClick={e=>{e.stopPropagation();setActiveTestId(test.id);setView("editGuide");setEditIdx(null);setNewTerm("");setNewDef("");}} style={{padding:"7px 14px",background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:8,color:"#86efac",fontSize:12,fontWeight:600,cursor:"pointer"}}>
+                            ✏️ {hasGuide?"Edit":"Add"} Study Material
+                          </button>
+                          <button onClick={e=>{e.stopPropagation();deleteTest(test.id);}} style={{padding:"7px 14px",background:"rgba(239,68,68,0.1)",border:"1px solid rgba(239,68,68,0.2)",borderRadius:8,color:"#fca5a5",fontSize:12,cursor:"pointer"}}>Remove</button>
+                        </div>
+                        {hasGuide&&count>=2&&(
+                          <div>
+                            <div style={{fontSize:11,color:"#9ca3af",textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>Quiz Me</div>
+                            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
+                              {[{type:"mc",label:"Multiple Choice",icon:"🔘"},{type:"tf",label:"True / False",icon:"✅"},{type:"fill",label:"Fill in Blank",icon:"✍️"},{type:"match",label:"Matching",icon:"🔗"}].map(qt => (
+                                <button key={qt.type} onClick={e=>{e.stopPropagation();startQuiz(test.id,qt.type);}} style={{padding:"10px 8px",background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:10,color:"#c4b5fd",fontSize:12,fontWeight:500,cursor:"pointer",textAlign:"center"}}>
+                                  {qt.icon} {qt.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </>
+          )}
+
+          {upcoming.length===0&&(
+            <div style={{background:"rgba(15,20,35,0.6)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:16,padding:24,textAlign:"center",marginBottom:20}}>
+              <div style={{fontSize:32,marginBottom:8}}>🎉</div>
+              <div style={{fontWeight:600}}>No upcoming tests</div>
+              <div style={{fontSize:13,color:"#6b8db5",marginTop:4}}>Add one with the buttons above</div>
+            </div>
+          )}
+
+          {upcoming.length>0&&(
+            <button onClick={generatePlan} disabled={planLoading} style={{width:"100%",padding:"14px",marginTop:4,marginBottom:20,background:planLoading?"rgba(34,197,94,0.08)":"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.08))",border:"1px solid rgba(34,197,94,0.3)",borderRadius:14,color:"#86efac",fontSize:14,fontWeight:600,cursor:planLoading?"wait":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+              {planLoading?<><span style={{display:"inline-block",width:16,height:16,border:"2px solid #86efac",borderTopColor:"transparent",borderRadius:"50%",animation:"spin 0.8s linear infinite"}} /> Generating...</>:<>{studyPlan?"🔄 Regenerate":"📋 Generate"} Study Plan</>}
+            </button>
+          )}
+
+          {studyPlan&&Array.isArray(studyPlan)&&(
+            <div>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                <h2 style={{margin:0,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:"#9ca3af"}}>Study Plan</h2>
+                <button onClick={()=>{setStudyPlan(null);localStorage.removeItem(PLAN_KEY);}} style={{background:"none",border:"none",color:"#6b8db5",fontSize:11,cursor:"pointer",textDecoration:"underline"}}>Clear</button>
+              </div>
+              {studyPlan.map((day,di) => (
+                <div key={di} style={{background:"rgba(15,20,35,0.6)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,padding:14,marginBottom:8}}>
+                  <div style={{fontSize:13,fontWeight:600,color:"#93c5fd",marginBottom:8}}>{day.dayLabel||fmtDate(day.day)}</div>
+                  {(day.tasks||[]).map((task,ti) => {
+                    var ti2 = getSubjectInfo(task.subject);
+                    return <div key={ti} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",borderTop:ti>0?"1px solid rgba(255,255,255,0.04)":"none"}}>
+                      <span style={{fontSize:15}}>{ti2.emoji}</span>
+                      <div style={{flex:1}}>
+                        <div style={{fontSize:13,fontWeight:500}}>{task.activity}</div>
+                        <div style={{fontSize:11,color:"#6b8db5",marginTop:2}}>{task.duration} · {task.subject}</div>
+                      </div>
+                    </div>;
+                  })}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {past.length>0&&(
+            <div style={{marginTop:24}}>
+              <h2 style={{margin:"0 0 10px",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:"#4a5568"}}>Past Tests ({past.length})</h2>
+              {past.map(test => {
+                var info = getSubjectInfo(test.topic+" "+test.subject);
+                return <div key={test.id} style={{background:"rgba(15,20,35,0.3)",border:"1px solid rgba(255,255,255,0.04)",borderRadius:10,padding:12,marginBottom:6,opacity:0.6,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                  <div><div style={{fontSize:13,fontWeight:500}}>{info.emoji} {test.topic}</div><div style={{fontSize:11,color:"#4a5568"}}>{fmtDate(test.date)}</div></div>
+                  <button onClick={()=>deleteTest(test.id)} style={{background:"none",border:"none",color:"#4a5568",cursor:"pointer",fontSize:16}}>×</button>
+                </div>;
+              })}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ADD TEST */}
+      {view==="add"&&(
+        <div className="fade-up">
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
+            <button onClick={()=>setView("home")} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
+            <h2 style={{margin:0,fontSize:17,fontWeight:600}}>Add Test</h2>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Subject</label>
+              <select value={newTest.subject} onChange={e=>setNewTest(p=>({...p,subject:e.target.value}))} style={{...inputStyle}}><option value="">Select subject...</option><option value="Math & Science">🔬 Math & Science</option><option value="Spanish">🇪🇸 Spanish</option><option value="ELA / Reading">📖 ELA / Reading</option><option value="Social Studies">🌍 Social Studies</option></select></div>
+            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Topic</label>
+              <input value={newTest.topic} onChange={e=>setNewTest(p=>({...p,topic:e.target.value}))} placeholder="e.g. Fractions" style={inputStyle} /></div>
+            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Test Date</label>
+              <input type="date" value={newTest.date} onChange={e=>setNewTest(p=>({...p,date:e.target.value}))} style={{...inputStyle,colorScheme:"dark"}} /></div>
+            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Notes (optional)</label>
+              <textarea value={newTest.notes} onChange={e=>setNewTest(p=>({...p,notes:e.target.value}))} placeholder="What to review..." rows={3} style={{...inputStyle,resize:"vertical"}} /></div>
+            <button onClick={addTest} disabled={!newTest.topic.trim()} style={{padding:"14px",background:newTest.topic.trim()?"linear-gradient(135deg,#1a5a3a,#0f4a2a)":"rgba(15,20,35,0.5)",border:"1px solid "+(newTest.topic.trim()?"rgba(34,197,94,0.4)":"rgba(255,255,255,0.06)"),borderRadius:12,color:newTest.topic.trim()?"#86efac":"#4a5568",fontSize:15,fontWeight:600,cursor:newTest.topic.trim()?"pointer":"default"}}>Add Test</button>
+          </div>
+        </div>
+      )}
+
+      {/* PASTE */}
+      {view==="paste"&&(
+        <div className="fade-up">
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+            <button onClick={()=>{setView("home");setEmailText("");}} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
+            <h2 style={{margin:0,fontSize:17,fontWeight:600}}>Extract from Email</h2>
+          </div>
+          <p style={{fontSize:13,color:"#9ca3af",margin:"0 0 14px",lineHeight:1.5}}>Paste a teacher email or study guide. AI extracts tests and vocab automatically.</p>
+          <textarea value={emailText} onChange={e=>setEmailText(e.target.value)} placeholder="Paste email or study guide here..." rows={8} style={{...inputStyle,fontSize:13,resize:"vertical",lineHeight:1.6,border:"1px solid rgba(168,85,247,0.2)"}} />
+          <button onClick={extractFromEmail} disabled={extracting||emailText.trim().length<20} style={{width:"100%",padding:"14px",marginTop:12,background:emailText.trim().length>=20?"linear-gradient(135deg,rgba(168,85,247,0.2),rgba(168,85,247,0.1))":"rgba(15,20,35,0.5)",border:"1px solid "+(emailText.trim().length>=20?"rgba(168,85,247,0.4)":"rgba(255,255,255,0.06)"),borderRadius:12,color:emailText.trim().length>=20?"#c4b5fd":"#4a5568",fontSize:15,fontWeight:600,cursor:emailText.trim().length>=20?"pointer":"default",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+            {extracting?<><span style={{display:"inline-block",width:16,height:16,border:"2px solid #c4b5fd",borderTopColor:"transparent",borderRadius:"50%",animation:"spin 0.8s linear infinite"}} /> Extracting...</>:"Extract Tests"}
+          </button>
+        </div>
+      )}
+
+      <div style={{textAlign:"center",marginTop:32,fontSize:11,color:"#4a5568"}}>Built with care · Add new topics anytime</div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
