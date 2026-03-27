@@ -2,679 +2,521 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Omar's LC">
+<meta name="apple-mobile-web-app-title" content="Learning Center">
+<meta name="theme-color" content="#0c1017">
 <title>Omar's Learning Center</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-  
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  :root {
-    --bg-deep: #0a0e17;
-    --bg-mid: #0f1520;
-    --bg-surface: #111827;
-    --text-primary: #e2e8f0;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b8db5;
-    --text-dim: #4a5568;
-    --blue: #3b82f6;
-    --blue-light: #93c5fd;
-    --green: #22c55e;
-    --green-light: #86efac;
-    --amber: #f59e0b;
-    --amber-light: #fbbf24;
-    --red: #ef4444;
-    --red-light: #fca5a5;
-    --purple: #8b5cf6;
-    --purple-light: #c4b5fd;
-    --border-subtle: rgba(255,255,255,0.06);
-    --border-light: rgba(255,255,255,0.1);
-  }
-  
-  body {
-    font-family: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: linear-gradient(145deg, var(--bg-deep) 0%, var(--bg-mid) 40%, var(--bg-surface) 100%);
-    color: var(--text-primary);
-    min-height: 100vh;
-    min-height: 100dvh;
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  #root { max-width: 600px; margin: 0 auto; padding: 24px 16px 100px; }
-  
-  input, select, textarea {
-    outline: none;
-    font-family: inherit;
-    -webkit-appearance: none;
-  }
-  input:focus, select:focus, textarea:focus {
-    border-color: rgba(59,130,246,0.4) !important;
-  }
-  
-  button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
-  
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-  
-  .fade-up { animation: fadeUp 0.3s ease; }
-  
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #2a3a4a; border-radius: 4px; }
-  
-  /* iPad optimizations */
-  @media (min-width: 768px) {
-    #root { padding: 32px 24px 100px; }
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-0:#0c1017;--bg-1:#111621;--bg-2:#171d2b;--bg-3:#1e2536;
+  --surface:#1a2030;--surface-hover:#212940;
+  --text-0:#f1f3f8;--text-1:#c8cdd8;--text-2:#8891a5;--text-3:#5a6478;
+  --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);--amber-mid:rgba(245,166,35,0.25);
+  --green:#34d399;--green-dim:rgba(52,211,153,0.1);--green-mid:rgba(52,211,153,0.25);
+  --blue:#60a5fa;--blue-dim:rgba(96,165,250,0.1);--blue-mid:rgba(96,165,250,0.25);
+  --red:#f87171;--red-dim:rgba(248,113,113,0.1);--red-mid:rgba(248,113,113,0.25);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.1);--purple-mid:rgba(167,139,250,0.25);
+  --radius:14px;--radius-sm:10px;--radius-lg:20px;
+  --shadow:0 4px 24px rgba(0,0,0,0.35);
+  --font:'Nunito',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font);background:var(--bg-0);color:var(--text-0);
+  min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+#root{max-width:520px;margin:0 auto;padding:20px 16px calc(24px + var(--safe-bottom));position:relative}
+button{font-family:var(--font);-webkit-tap-highlight-color:transparent;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:var(--font);outline:none;-webkit-appearance:none;color:var(--text-0);background:var(--bg-2);border:1.5px solid rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:14px 16px;font-size:15px;width:100%;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:rgba(96,165,250,0.5)}
+input[type="date"]{color-scheme:dark}
+textarea{resize:vertical;line-height:1.5}
+select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238891a5' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%{transform:scale(0.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes confetti-fall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(120px) rotate(720deg);opacity:0}}
+@keyframes pulse-ring{0%{transform:scale(0.9);opacity:0.7}50%{transform:scale(1.05);opacity:1}100%{transform:scale(0.9);opacity:0.7}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes count-up{from{opacity:0;transform:scale(0.5) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.fade-up{animation:fadeUp .35s ease both}
+.fade-in{animation:fadeIn .3s ease both}
+.pop-in{animation:pop .4s cubic-bezier(.175,.885,.32,1.275) both}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg-3);border-radius:4px}
+
+@media(min-width:768px){#root{padding:32px 24px 48px}}
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-
 <script type="text/babel">
-const { useState, useEffect, useCallback } = React;
+const{useState,useEffect,useCallback,useRef}=React;
 
-const STORAGE_KEY = "omar-lc-v4";
-const PLAN_KEY = "omar-plan-v4";
+/* ─── Storage ─── */
+const SK="omar-lc-v5",PK="omar-plan-v5";
+const load=(k,fb)=>{try{const d=localStorage.getItem(k);return d?JSON.parse(d):fb}catch{return fb}};
+const persist=(k,d)=>{try{localStorage.setItem(k,JSON.stringify(d))}catch{}};
 
-// Helpers
-function loadData(key, fallback) {
-  try { var d = localStorage.getItem(key); return d ? JSON.parse(d) : fallback; }
-  catch(e) { return fallback; }
-}
-function saveData(key, data) {
-  try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
-}
+/* ─── Subject Config ─── */
+const SUBJECTS=[
+  {keys:["math","science","inheritance","traits","organisms"],label:"Math & Science",emoji:"🔬",gradient:"linear-gradient(135deg,#064e1e 0%,#0a3a1a 100%)",border:"#1a8a3e",accent:"#34d399",tag:"SCI"},
+  {keys:["spanish","español"],label:"Spanish",emoji:"🇪🇸",gradient:"linear-gradient(135deg,#4a2a0a 0%,#3a1f08 100%)",border:"#8a5a1a",accent:"#fbbf24",tag:"SPA"},
+  {keys:["ela","reading","english","writing","grammar","vocabulary"],label:"ELA / Reading",emoji:"📖",gradient:"linear-gradient(135deg,#0a2a4a 0%,#081e36 100%)",border:"#1a5a8a",accent:"#60a5fa",tag:"ELA"},
+  {keys:["social","history","geography","civics","economy","market","goods"],label:"Social Studies",emoji:"🌍",gradient:"linear-gradient(135deg,#2d0a4a 0%,#1f0836 100%)",border:"#6a1a8a",accent:"#a78bfa",tag:"SOC"},
+];
+const getSub=t=>{const l=(t||"").toLowerCase();for(const s of SUBJECTS)if(s.keys.some(k=>l.includes(k)))return s;return{label:"General",emoji:"📝",gradient:"linear-gradient(135deg,#1a2a3a,#141e2a)",border:"#3a5a7a",accent:"#94a3b8",tag:"GEN"}};
 
-function getSubjectInfo(text) {
-  var lower = (text || "").toLowerCase();
-  var map = [
-    [["math","science","inheritance","traits","organisms"], { label:"Math & Science", emoji:"🔬", color:"#0a4a1e", border:"#1a8a3e", accent:"#4ade80" }],
-    [["spanish","español"], { label:"Spanish", emoji:"🇪🇸", color:"#4a2a0a", border:"#8a5a1a", accent:"#fbbf24" }],
-    [["ela","reading","english","writing","grammar","vocabulary"], { label:"ELA / Reading", emoji:"📖", color:"#0a2a4a", border:"#1a5a8a", accent:"#60a5fa" }],
-    [["social","history","geography","civics","economy","market","goods"], { label:"Social Studies", emoji:"🌍", color:"#3a0a4a", border:"#6a1a8a", accent:"#c084fc" }],
-  ];
-  for (var i = 0; i < map.length; i++) {
-    if (map[i][0].some(k => lower.includes(k))) return map[i][1];
-  }
-  return { label:"General", emoji:"📝", color:"#1a2a3a", border:"#3a5a7a", accent:"#94a3b8" };
-}
+/* ─── Helpers ─── */
+const daysTo=d=>{if(!d)return null;const t=new Date(d+"T00:00:00"),n=new Date();n.setHours(0,0,0,0);return Math.ceil((t-n)/864e5)};
+const fDate=d=>d?new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}):"TBD";
+const urgC=d=>d===null?"#6b7280":d<=2?"#f87171":d<=5?"#f5a623":"#34d399";
+const shuf=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]]}return b};
 
-function daysUntil(d) {
-  if (!d) return null;
-  var t = new Date(d+"T00:00:00"), n = new Date();
-  n.setHours(0,0,0,0);
-  return Math.ceil((t-n)/86400000);
-}
-
-function fmtDate(d) {
-  if (!d) return "Date TBD";
-  return new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
-}
-
-function urgColor(d) {
-  if (d===null) return "#6b7280";
-  if (d<=2) return "#ef4444";
-  if (d<=5) return "#f59e0b";
-  return "#22c55e";
-}
-
-function shuffle(a) {
-  var b=a.slice();
-  for (var i=b.length-1;i>0;i--) { var j=Math.floor(Math.random()*(i+1)); var t=b[i]; b[i]=b[j]; b[j]=t; }
-  return b;
-}
-
-var DEFAULT_TESTS = [
-  { id:"t1", subject:"Math & Science", topic:"Inheritance & Traits", date:"2026-04-01", notes:"Study inherited vs learned traits, dominant/recessive", studyGuide:[] },
-  { id:"t2", subject:"Social Studies", topic:"Markets & Economy (Lesson 9)", date:"2026-04-02", notes:"Vocab: economy, free market economy, services, goods, scarcity, market", studyGuide:[
+const DEFAULTS=[
+  {id:"t1",subject:"Math & Science",topic:"Inheritance & Traits",date:"2026-04-01",notes:"Study inherited vs learned traits, dominant/recessive",studyGuide:[]},
+  {id:"t2",subject:"Social Studies",topic:"Markets & Economy (Lesson 9)",date:"2026-04-02",notes:"Vocab: economy, free market economy, services, goods, scarcity, market",studyGuide:[
     {term:"Market",def:"A place where people buy and sell things"},
     {term:"Competition",def:"You can compete with other sellers by lowering your prices"},
     {term:"Economy",def:"When you buy or sell something, you are part of the economy. It can be big or small"},
     {term:"Goods",def:"Items that can be bought, sold, or traded (toys, food, clothing) — things you can see or touch"},
     {term:"Services",def:"Tasks you pay someone to do for you (hair dresser, lawn care, house cleaning, face painting)"},
     {term:"Free Market Economy",def:"Where the choices are left to the buyer and the seller"},
-    {term:"Scarcity",def:"Farmers cannot grow as much as the customer wants — they are limited to what their crop can produce each year"},
-  ]}
+    {term:"Scarcity",def:"Farmers cannot grow as much as the customer wants — limited to what their crop can produce each year"},
+  ]},
 ];
 
-var inputStyle = {
-  width:"100%", padding:"12px", background:"rgba(15,20,35,0.8)",
-  border:"1px solid rgba(255,255,255,0.1)", borderRadius:10,
-  color:"#e2e8f0", fontSize:14, boxSizing:"border-box", fontFamily:"inherit"
-};
+/* ─── Components ─── */
+const Pill=({children,color,style})=><span style={{display:"inline-flex",alignItems:"center",padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:700,letterSpacing:0.5,background:color+"18",color,border:"1px solid "+color+"30",...style}}>{children}</span>;
+const Badge=({days})=>{if(days===null||days<0)return null;const c=urgC(days);return<div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minWidth:52,height:52,borderRadius:12,background:c+"14",border:"1.5px solid "+c+"35"}}><span style={{fontSize:22,fontWeight:800,lineHeight:1,color:c}}>{days}</span><span style={{fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,color:c,opacity:0.8,marginTop:1}}>{days===0?"today":days===1?"tmrw":"days"}</span></div>};
+const BackBtn=({onClick,label})=><button onClick={onClick} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 0",marginBottom:16,color:"var(--text-2)",fontSize:14,fontWeight:600}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>{label||"Back"}</button>;
+const Spinner=({size=18,color="var(--blue)"})=><span style={{display:"inline-block",width:size,height:size,border:`2.5px solid ${color}30`,borderTopColor:color,borderRadius:"50%",animation:"spin .7s linear infinite"}}/>;
 
-function App() {
-  var [tests,setTests] = useState([]);
-  var [studyPlan,setStudyPlan] = useState(null);
-  var [view,setView] = useState("home");
-  var [selectedTest,setSelectedTest] = useState(null);
-  var [activeTestId,setActiveTestId] = useState(null);
-  var [emailText,setEmailText] = useState("");
-  var [extracting,setExtracting] = useState(false);
-  var [planLoading,setPlanLoading] = useState(false);
-  var [newTest,setNewTest] = useState({subject:"",topic:"",date:"",notes:""});
-  var [newTerm,setNewTerm] = useState("");
-  var [newDef,setNewDef] = useState("");
-  var [editIdx,setEditIdx] = useState(null);
-  var [editTerm,setEditTerm] = useState("");
-  var [editDef,setEditDef] = useState("");
+const Confetti=()=>{const colors=["#f5a623","#34d399","#60a5fa","#f87171","#a78bfa","#fbbf24"];return<div style={{position:"fixed",top:0,left:0,right:0,bottom:0,pointerEvents:"none",zIndex:999,overflow:"hidden"}}>{Array.from({length:40}).map((_,i)=><div key={i} style={{position:"absolute",top:"-10px",left:Math.random()*100+"%",width:8+Math.random()*6,height:8+Math.random()*6,borderRadius:Math.random()>0.5?"50%":"2px",background:colors[i%colors.length],animation:`confetti-fall ${1+Math.random()*1.5}s ease-in ${Math.random()*0.5}s forwards`,opacity:0.9}}/>)}</div>};
 
-  // Quiz
-  var [quizType,setQuizType] = useState(null);
-  var [quizData,setQuizData] = useState(null);
-  var [qIdx,setQIdx] = useState(0);
-  var [score,setScore] = useState(0);
-  var [answered,setAnswered] = useState(false);
-  var [userAnswer,setUserAnswer] = useState(null);
-  var [fillInput,setFillInput] = useState("");
-  var [matchSelections,setMatchSelections] = useState({});
-  var [matchSubmitted,setMatchSubmitted] = useState(false);
-  var [showHelp,setShowHelp] = useState(false);
+function App(){
+  const[tests,setTests]=useState([]);
+  const[plan,setPlan]=useState(null);
+  const[view,setView]=useState("home");
+  const[sel,setSel]=useState(null);
+  const[activeId,setActiveId]=useState(null);
+  const[email,setEmail]=useState("");
+  const[extracting,setExtracting]=useState(false);
+  const[planLoading,setPlanLoading]=useState(false);
+  const[form,setForm]=useState({subject:"",topic:"",date:"",notes:""});
+  const[nt,setNt]=useState("");const[nd,setNd]=useState("");
+  const[ei,setEi]=useState(null);const[et,setEt]=useState("");const[ed,setEd]=useState("");
+  const[qt,setQt]=useState(null);const[qd,setQd]=useState(null);const[qi,setQi]=useState(0);
+  const[sc,setSc]=useState(0);const[ans,setAns]=useState(false);const[ua,setUa]=useState(null);
+  const[fi,setFi]=useState("");const[ms,setMs]=useState({});const[msub,setMsub]=useState(false);
+  const[showHelp,setShowHelp]=useState(false);
+  const[showConfetti,setShowConfetti]=useState(false);
+  const[detailTab,setDetailTab]=useState("guide");
+  const fiRef=useRef(null);
 
-  // Load
-  useEffect(() => {
-    var saved = loadData(STORAGE_KEY, null);
-    if (saved && saved.length > 0) {
-      // Merge defaults
-      var merged = DEFAULT_TESTS.map(dt => {
-        var ex = saved.find(s => s.id === dt.id);
-        return ex ? {...dt,...ex, studyGuide:(ex.studyGuide && ex.studyGuide.length>0)?ex.studyGuide:dt.studyGuide} : dt;
-      });
-      saved.forEach(s => { if (!merged.find(m => m.id === s.id)) merged.push(s); });
+  useEffect(()=>{
+    const saved=load(SK,null);
+    if(saved&&saved.length){
+      const merged=DEFAULTS.map(dt=>{const ex=saved.find(s=>s.id===dt.id);return ex?{...dt,...ex,studyGuide:(ex.studyGuide?.length)?ex.studyGuide:dt.studyGuide}:dt});
+      saved.forEach(s=>{if(!merged.find(m=>m.id===s.id))merged.push(s)});
       setTests(merged);
-    } else {
-      setTests(DEFAULT_TESTS);
-      saveData(STORAGE_KEY, DEFAULT_TESTS);
-    }
-    setStudyPlan(loadData(PLAN_KEY, null));
-  }, []);
+    }else{setTests(DEFAULTS);persist(SK,DEFAULTS)}
+    setPlan(load(PK,null));
+  },[]);
 
-  var save = useCallback((u) => { setTests(u); saveData(STORAGE_KEY, u); }, []);
+  const save=useCallback(u=>{setTests(u);persist(SK,u)},[]);
+  const addTest=()=>{if(!form.topic.trim())return;save([...tests,{...form,id:Date.now()+"",studyGuide:[]}].sort((a,b)=>(a.date||"z").localeCompare(b.date||"z")));setForm({subject:"",topic:"",date:"",notes:""});go("home")};
+  const delTest=id=>{save(tests.filter(t=>t.id!==id));setSel(null)};
+  const go=(v,id)=>{setView(v);if(id)setActiveId(id)};
 
-  var addTest = () => {
-    if (!newTest.topic.trim()) return;
-    var t = {...newTest, id:Date.now().toString(), studyGuide:[]};
-    var u = [...tests, t].sort((a,b)=>(a.date||"z").localeCompare(b.date||"z"));
-    save(u);
-    setNewTest({subject:"",topic:"",date:"",notes:""});
-    setView("home");
-  };
+  // Study guide
+  const addG=()=>{if(!nt.trim()||!nd.trim())return;save(tests.map(t=>t.id!==activeId?t:{...t,studyGuide:[...(t.studyGuide||[]),{term:nt.trim(),def:nd.trim()}]}));setNt("");setNd("")};
+  const updG=i=>{if(!et.trim()||!ed.trim())return;save(tests.map(t=>t.id!==activeId?t:{...t,studyGuide:(t.studyGuide||[]).map((x,j)=>j===i?{term:et.trim(),def:ed.trim()}:x)}));setEi(null)};
+  const delG=i=>save(tests.map(t=>t.id!==activeId?t:{...t,studyGuide:(t.studyGuide||[]).filter((_,j)=>j!==i)}));
 
-  var deleteTest = (id) => { save(tests.filter(t=>t.id!==id)); setSelectedTest(null); };
+  // Extract
+  const extract=async()=>{
+    if(email.trim().length<20)return;setExtracting(true);
+    try{
+      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:"Extract test/quiz info from this school content for a 3rd grader. Today: "+new Date().toISOString().split("T")[0]+", year 2026.\n\n"+email.slice(0,3000)+"\n\nONLY JSON array, no markdown.\n[{\"subject\":\"Social Studies\",\"topic\":\"Topic\",\"date\":\"2026-04-05\",\"notes\":\"Notes\",\"studyGuide\":[{\"term\":\"Word\",\"def\":\"Def\"}]}]\nIf no tests: []"}]})});
+      if(!r.ok)throw new Error("API "+r.status);
+      const d=await r.json();const txt=(d.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").replace(/```json|```/g,"").trim();
+      const p=JSON.parse(txt);
+      if(Array.isArray(p)&&p.length){save([...tests,...p.filter(t=>t?.topic).map(t=>({...t,id:Date.now()+"-"+Math.random().toString(36).slice(2,6),studyGuide:t.studyGuide||[]}))].sort((a,b)=>(a.date||"z").localeCompare(b.date||"z")));setEmail("");go("home")}
+      else alert("No tests found in that content.");
+    }catch(e){alert("Error: "+e.message)}setExtracting(false)};
 
-  // Study guide editing
-  var addGuideItem = () => {
-    if (!newTerm.trim()||!newDef.trim()) return;
-    save(tests.map(t => t.id!==activeTestId ? t : {...t, studyGuide:[...(t.studyGuide||[]),{term:newTerm.trim(),def:newDef.trim()}]}));
-    setNewTerm(""); setNewDef("");
-  };
-
-  var updateGuideItem = (idx) => {
-    if (!editTerm.trim()||!editDef.trim()) return;
-    save(tests.map(t => t.id!==activeTestId ? t : {...t, studyGuide:(t.studyGuide||[]).map((item,i)=>i===idx?{term:editTerm.trim(),def:editDef.trim()}:item)}));
-    setEditIdx(null);
-  };
-
-  var deleteGuideItem = (idx) => {
-    save(tests.map(t => t.id!==activeTestId ? t : {...t, studyGuide:(t.studyGuide||[]).filter((_,i)=>i!==idx)}));
-  };
-
-  // Email extract
-  var extractFromEmail = async () => {
-    if (!emailText.trim()||emailText.trim().length<20) return;
-    setExtracting(true);
-    try {
-      var res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:"Extract test/quiz info from this school content for a 3rd grader. Today is "+new Date().toISOString().split("T")[0]+", year is 2026.\n\n"+emailText.slice(0,3000)+"\n\nRespond ONLY JSON array, no markdown/backticks.\n[{\"subject\":\"Social Studies\",\"topic\":\"Topic\",\"date\":\"2026-04-05\",\"notes\":\"Notes\",\"studyGuide\":[{\"term\":\"Word\",\"def\":\"Definition\"}]}]\nInclude studyGuide if vocab/key terms exist. If no tests: []"}]})});
-      if (!res.ok) throw new Error("API "+res.status);
-      var data = await res.json();
-      var text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").replace(/```json|```/g,"").trim();
-      var parsed = JSON.parse(text);
-      if (Array.isArray(parsed)&&parsed.length>0) {
-        var nt = parsed.filter(t=>t&&t.topic).map(t=>({...t,id:Date.now()+"-"+Math.random().toString(36).slice(2,6),studyGuide:t.studyGuide||[]}));
-        save([...tests,...nt].sort((a,b)=>(a.date||"z").localeCompare(b.date||"z")));
-        setEmailText(""); setView("home");
-      } else alert("No tests found in that content.");
-    } catch(err) { alert("Error: "+err.message); }
-    setExtracting(false);
-  };
-
-  // Study plan
-  var generatePlan = async () => {
-    var up = tests.filter(t=>daysUntil(t.date)>=0);
-    if (up.length===0) return;
-    setPlanLoading(true);
-    try {
-      var res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:"Study plan for Omar, 3rd grader. Today: "+new Date().toISOString().split("T")[0]+".\nTests: "+JSON.stringify(up)+"\nRules: 15-20 min sessions, age-appropriate activities (flashcards, drawing, sorting games, verbal quizzes with parents), stagger back-to-back tests.\nONLY JSON array, no markdown.\n[{\"day\":\"YYYY-MM-DD\",\"dayLabel\":\"Mon, Apr 1\",\"tasks\":[{\"subject\":\"Math & Science\",\"activity\":\"Draw traits chart\",\"duration\":\"15 min\"}]}]"}]})});
-      if (!res.ok) throw new Error("API "+res.status);
-      var data = await res.json();
-      var text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").replace(/```json|```/g,"").trim();
-      var plan = JSON.parse(text);
-      var pa = Array.isArray(plan)?plan:[plan];
-      setStudyPlan(pa);
-      saveData(PLAN_KEY, pa);
-    } catch(err) { alert("Error: "+err.message); }
-    setPlanLoading(false);
-  };
+  // Plan
+  const genPlan=async()=>{
+    const up=tests.filter(t=>daysTo(t.date)>=0);if(!up.length)return;setPlanLoading(true);
+    try{
+      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:"Study plan for Omar, 3rd grader at Cedar Hill Prep. Today: "+new Date().toISOString().split("T")[0]+".\nTests: "+JSON.stringify(up)+"\nRules: 15-20 min sessions, age-appropriate (flashcards, drawing, sorting, verbal quizzes w/ parents, practice), stagger back-to-back tests, no weekends unless test is Monday.\nONLY JSON, no markdown.\n[{\"day\":\"YYYY-MM-DD\",\"dayLabel\":\"Mon, Apr 1\",\"tasks\":[{\"subject\":\"Math & Science\",\"activity\":\"Draw traits chart\",\"duration\":\"15 min\"}]}]"}]})});
+      if(!r.ok)throw new Error("API "+r.status);
+      const d=await r.json();const txt=(d.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").replace(/```json|```/g,"").trim();
+      const pl=JSON.parse(txt);const pa=Array.isArray(pl)?pl:[pl];setPlan(pa);persist(PK,pa);
+    }catch(e){alert("Error: "+e.message)}setPlanLoading(false)};
 
   // Quiz
-  var startQuiz = (testId, type) => {
-    var test = tests.find(t=>t.id===testId);
-    if (!test||!test.studyGuide||test.studyGuide.length<2) return;
-    setActiveTestId(testId); setQuizType(type);
-    setQIdx(0); setScore(0); setAnswered(false); setUserAnswer(null); setFillInput("");
-    setMatchSelections({}); setMatchSubmitted(false);
-    var sg = test.studyGuide;
-    if (type==="mc") {
-      setQuizData(shuffle(sg).map(item => {
-        var wrong = shuffle(sg.filter(x=>x.term!==item.term)).slice(0,3);
-        return {term:item.term, options:shuffle([{text:item.def,correct:true},...wrong.map(w=>({text:w.def,correct:false}))])};
-      }));
-    } else if (type==="tf") {
-      var qs = [];
-      sg.forEach(item => {
-        qs.push({term:item.term,shown:item.def,correct:true});
-        var w = shuffle(sg.filter(x=>x.term!==item.term))[0];
-        if (w) qs.push({term:item.term,shown:w.def,correct:false});
-      });
-      setQuizData(shuffle(qs).slice(0,Math.min(10,sg.length*2)));
-    } else if (type==="fill") {
-      setQuizData(shuffle(sg).map(item=>({term:item.term,def:item.def})));
-    } else if (type==="match") {
-      var items = shuffle(sg).slice(0,Math.min(6,sg.length));
-      setQuizData({terms:items.map(i=>i.term),defs:shuffle(items.map(i=>i.def)),correct:items});
-    }
-    setView("quiz");
-  };
+  const startQ=(id,type)=>{
+    const t=tests.find(x=>x.id===id);if(!t?.studyGuide||t.studyGuide.length<2)return;
+    setActiveId(id);setQt(type);setQi(0);setSc(0);setAns(false);setUa(null);setFi("");setMs({});setMsub(false);setShowConfetti(false);
+    const sg=t.studyGuide;
+    if(type==="mc")setQd(shuf(sg).map(it=>({term:it.term,opts:shuf([{t:it.def,c:true},...shuf(sg.filter(x=>x.term!==it.term)).slice(0,3).map(w=>({t:w.def,c:false}))])})));
+    else if(type==="tf"){const qs=[];sg.forEach(it=>{qs.push({term:it.term,shown:it.def,c:true});const w=shuf(sg.filter(x=>x.term!==it.term))[0];if(w)qs.push({term:it.term,shown:w.def,c:false})});setQd(shuf(qs).slice(0,Math.min(10,sg.length*2)))}
+    else if(type==="fill")setQd(shuf(sg).map(it=>({term:it.term,def:it.def})));
+    else if(type==="match"){const items=shuf(sg).slice(0,Math.min(5,sg.length));setQd({terms:items.map(i=>i.term),defs:shuf(items.map(i=>i.def)),correct:items})}
+    go("quiz")};
 
-  var checkFill = () => {
-    if (!quizData||!quizData[qIdx]) return;
-    var ans = fillInput.trim().toLowerCase();
-    var correct = quizData[qIdx].term.toLowerCase();
-    var ok = correct.includes(ans)||ans.includes(correct)||(ans.length>2&&correct.split(" ").some(w=>w.toLowerCase()===ans));
-    setAnswered(true); setUserAnswer(ok);
-    if (ok) setScore(s=>s+1);
-  };
+  const chkFill=()=>{if(!qd?.[qi])return;const a=fi.trim().toLowerCase(),c=qd[qi].term.toLowerCase();const ok=c.includes(a)||a.includes(c)||(a.length>2&&c.split(" ").some(w=>w.toLowerCase()===a));setAns(true);setUa(ok);if(ok)setSc(s=>s+1)};
+  const nxtQ=()=>{setQi(i=>i+1);setAns(false);setUa(null);setFi("");setTimeout(()=>fiRef.current?.focus(),100)};
+  const chkMatch=()=>{let c=0;qd.correct.forEach(it=>{if(ms[it.term]===it.def)c++});setSc(c);setMsub(true);if(c>=qd.correct.length*0.8)setShowConfetti(true)};
+  const finishQ=()=>{const total=qt==="match"?qd.correct.length:qd.length;if(sc>=total*0.8)setShowConfetti(true);setQi(qt==="match"?0:qd.length)};
 
-  var nextQ = () => { setQIdx(i=>i+1); setAnswered(false); setUserAnswer(null); setFillInput(""); };
+  const at=tests.find(t=>t.id===activeId);
+  const upcoming=tests.filter(t=>{const d=daysTo(t.date);return d===null||d>=0});
+  const past=tests.filter(t=>{const d=daysTo(t.date);return d!==null&&d<0});
 
-  var checkMatch = () => {
-    var c = 0;
-    quizData.correct.forEach(item => { if (matchSelections[item.term]===item.def) c++; });
-    setScore(c); setMatchSubmitted(true);
-  };
+  /* ═══════════ QUIZ ═══════════ */
+  if(view==="quiz"&&qd){
+    const si=at?getSub(at.topic+" "+at.subject):{};
+    const total=qt==="match"?qd.correct.length:qd.length;
+    const done=qt==="match"?msub:qi>=total;
+    const showing=qt!=="match"&&qi<total;
+    const pct=qt!=="match"?((qi+(ans?1:0))/total*100):0;
 
-  var activeTest = tests.find(t=>t.id===activeTestId);
-  var upcoming = tests.filter(t=>daysUntil(t.date)===null||daysUntil(t.date)>=0);
-  var past = tests.filter(t=>daysUntil(t.date)!==null&&daysUntil(t.date)<0);
-
-  // ===== QUIZ VIEW =====
-  if (view==="quiz"&&quizData) {
-    var testInfo = activeTest ? getSubjectInfo(activeTest.topic+" "+activeTest.subject) : {};
-    var total = quizType==="match" ? quizData.correct.length : quizData.length;
-    var isFinished = quizType==="match" ? matchSubmitted : (qIdx>=total);
-    var showingQ = quizType!=="match"&&qIdx<total;
-
-    return (
-      <div className="fade-up">
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
-          <button onClick={()=>{setView("home");setQuizType(null);}} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
-          <div style={{flex:1}}>
-            <div style={{fontSize:15,fontWeight:600}}>{activeTest?activeTest.topic:"Quiz"}</div>
-            <div style={{fontSize:12,color:"#9ca3af"}}>
-              {quizType==="mc"&&"Multiple Choice"}{quizType==="tf"&&"True or False"}{quizType==="fill"&&"Fill in the Blank"}{quizType==="match"&&"Matching"}
-            </div>
-          </div>
-          {!isFinished&&quizType!=="match"&&<div style={{fontSize:13,color:"#9ca3af"}}>{qIdx+1}/{total}</div>}
-        </div>
-
-        {quizType!=="match"&&(
-          <div style={{background:"rgba(255,255,255,0.06)",borderRadius:4,height:5,marginBottom:20,overflow:"hidden"}}>
-            <div style={{background:"linear-gradient(90deg,#3b82f6,#8b5cf6)",height:"100%",borderRadius:4,width:((qIdx+(answered?1:0))/total*100)+"%",transition:"width 0.3s"}} />
-          </div>
-        )}
-
-        {isFinished&&(
-          <div style={{textAlign:"center",padding:"30px 20px"}} className="fade-up">
-            <div style={{fontSize:48,marginBottom:12}}>{score>=total*0.8?"🌟":score>=total*0.5?"👍":"📚"}</div>
-            <div style={{fontSize:28,fontWeight:700}}>{score}/{total}</div>
-            <div style={{fontSize:14,color:"#9ca3af",marginTop:6,marginBottom:24}}>
-              {score>=total*0.8?"Amazing job, Omar!":score>=total*0.5?"Good effort! Let's review a few.":"Let's practice more!"}
-            </div>
-            <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-              <button onClick={()=>startQuiz(activeTestId,quizType)} style={{padding:"10px 20px",background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:13,fontWeight:600,cursor:"pointer"}}>Try Again</button>
-              <button onClick={()=>{setView("home");setQuizType(null);}} style={{padding:"10px 20px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:10,color:"#e2e8f0",fontSize:13,fontWeight:600,cursor:"pointer"}}>Done</button>
-            </div>
-          </div>
-        )}
-
-        {quizType==="mc"&&showingQ&&(
-          <div className="fade-up">
-            <div style={{background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:16,padding:"20px 18px",marginBottom:16,textAlign:"center"}}>
-              <div style={{fontSize:11,color:"#a78bfa",textTransform:"uppercase",letterSpacing:2,marginBottom:8}}>What is</div>
-              <div style={{fontSize:20,fontWeight:700}}>{quizData[qIdx].term}?</div>
-            </div>
-            <div style={{display:"flex",flexDirection:"column",gap:8}}>
-              {quizData[qIdx].options.map((opt,i) => {
-                var bg="rgba(15,20,35,0.6)",bdr="rgba(255,255,255,0.08)";
-                if (answered&&opt.correct){bg="rgba(34,197,94,0.15)";bdr="rgba(34,197,94,0.4)";}
-                else if(answered&&userAnswer===i&&!opt.correct){bg="rgba(239,68,68,0.15)";bdr="rgba(239,68,68,0.4)";}
-                return <button key={i} onClick={()=>{if(answered)return;setAnswered(true);setUserAnswer(i);if(opt.correct)setScore(s=>s+1);}} style={{padding:"12px 14px",background:bg,border:"1px solid "+bdr,borderRadius:10,color:"#e2e8f0",fontSize:13,textAlign:"left",cursor:answered?"default":"pointer",lineHeight:1.4}}>
-                  {answered&&opt.correct&&"✅ "}{answered&&userAnswer===i&&!opt.correct&&"❌ "}{opt.text}
-                </button>;
-              })}
-            </div>
-            {answered&&qIdx<total-1&&<button onClick={nextQ} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:14,fontWeight:600,cursor:"pointer"}}>Next →</button>}
-            {answered&&qIdx===total-1&&<button onClick={()=>setQIdx(total)} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:10,color:"#86efac",fontSize:14,fontWeight:600,cursor:"pointer"}}>See Results</button>}
-          </div>
-        )}
-
-        {quizType==="tf"&&showingQ&&(
-          <div className="fade-up">
-            <div style={{background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:16,padding:"20px 18px",marginBottom:10,textAlign:"center"}}>
-              <div style={{fontSize:13,color:"#a78bfa",marginBottom:8}}>Is this the correct definition of</div>
-              <div style={{fontSize:20,fontWeight:700,marginBottom:12}}>{quizData[qIdx].term}?</div>
-              <div style={{fontSize:14,color:"#cbd5e1",lineHeight:1.5,fontStyle:"italic"}}>"{quizData[qIdx].shown}"</div>
-            </div>
-            {answered&&<div style={{textAlign:"center",padding:8,marginBottom:8,fontSize:13,color:userAnswer===quizData[qIdx].correct?"#86efac":"#fca5a5"}}>{userAnswer===quizData[qIdx].correct?"✅ Correct!":"❌ Incorrect"}</div>}
-            <div style={{display:"flex",gap:10}}>
-              {[true,false].map(val => {
-                var bg="rgba(15,20,35,0.6)",bdr="rgba(255,255,255,0.08)";
-                if(answered&&val===quizData[qIdx].correct){bg="rgba(34,197,94,0.15)";bdr="rgba(34,197,94,0.4)";}
-                else if(answered&&userAnswer===val&&val!==quizData[qIdx].correct){bg="rgba(239,68,68,0.15)";bdr="rgba(239,68,68,0.4)";}
-                return <button key={String(val)} onClick={()=>{if(answered)return;setAnswered(true);setUserAnswer(val);if(val===quizData[qIdx].correct)setScore(s=>s+1);}} style={{flex:1,padding:"16px",background:bg,border:"1px solid "+bdr,borderRadius:12,color:"#e2e8f0",fontSize:16,fontWeight:600,cursor:answered?"default":"pointer"}}>
-                  {val?"👍 True":"👎 False"}
-                </button>;
-              })}
-            </div>
-            {answered&&qIdx<total-1&&<button onClick={nextQ} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:14,fontWeight:600,cursor:"pointer"}}>Next →</button>}
-            {answered&&qIdx===total-1&&<button onClick={()=>setQIdx(total)} style={{width:"100%",padding:"12px",marginTop:14,background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:10,color:"#86efac",fontSize:14,fontWeight:600,cursor:"pointer"}}>See Results</button>}
-          </div>
-        )}
-
-        {quizType==="fill"&&showingQ&&(
-          <div className="fade-up">
-            <div style={{background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:16,padding:"20px 18px",marginBottom:16}}>
-              <div style={{fontSize:11,color:"#a78bfa",textTransform:"uppercase",letterSpacing:2,marginBottom:8}}>What term matches this definition?</div>
-              <div style={{fontSize:15,color:"#e2e8f0",lineHeight:1.5}}>{quizData[qIdx].def}</div>
-            </div>
-            <input value={fillInput} onChange={e=>setFillInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!answered)checkFill();}} placeholder="Type your answer..." disabled={answered} style={{...inputStyle,marginBottom:10,opacity:answered?0.6:1}} />
-            {answered&&<div style={{padding:"10px 14px",marginBottom:10,borderRadius:8,background:userAnswer?"rgba(34,197,94,0.15)":"rgba(239,68,68,0.15)",border:"1px solid "+(userAnswer?"rgba(34,197,94,0.3)":"rgba(239,68,68,0.3)"),fontSize:13}}>{userAnswer?"✅ Correct!":<span>❌ The answer is: <strong>{quizData[qIdx].term}</strong></span>}</div>}
-            {!answered&&<button onClick={checkFill} disabled={!fillInput.trim()} style={{width:"100%",padding:"12px",background:fillInput.trim()?"rgba(139,92,246,0.2)":"rgba(15,20,35,0.5)",border:"1px solid "+(fillInput.trim()?"rgba(139,92,246,0.4)":"rgba(255,255,255,0.06)"),borderRadius:10,color:fillInput.trim()?"#c4b5fd":"#4a5568",fontSize:14,fontWeight:600,cursor:fillInput.trim()?"pointer":"default"}}>Check</button>}
-            {answered&&qIdx<total-1&&<button onClick={nextQ} style={{width:"100%",padding:"12px",background:"rgba(59,130,246,0.15)",border:"1px solid rgba(59,130,246,0.3)",borderRadius:10,color:"#93c5fd",fontSize:14,fontWeight:600,cursor:"pointer"}}>Next →</button>}
-            {answered&&qIdx===total-1&&<button onClick={()=>setQIdx(total)} style={{width:"100%",padding:"12px",background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:10,color:"#86efac",fontSize:14,fontWeight:600,cursor:"pointer"}}>See Results</button>}
-          </div>
-        )}
-
-        {quizType==="match"&&!matchSubmitted&&(
-          <div className="fade-up">
-            <div style={{fontSize:13,color:"#9ca3af",marginBottom:14}}>Match each term with its correct definition.</div>
-            {quizData.terms.map((term,i) => (
-              <div key={i} style={{marginBottom:12}}>
-                <div style={{fontSize:14,fontWeight:600,color:testInfo.accent||"#c4b5fd",marginBottom:6}}>{term}</div>
-                <select value={matchSelections[term]||""} onChange={e=>setMatchSelections(s=>({...s,[term]:e.target.value}))} style={{...inputStyle,fontSize:13,padding:10}}>
-                  <option value="">Select definition...</option>
-                  {quizData.defs.map((d,di) => <option key={di} value={d}>{d.length>60?d.slice(0,57)+"...":d}</option>)}
-                </select>
-              </div>
-            ))}
-            <button onClick={checkMatch} disabled={Object.keys(matchSelections).length<quizData.terms.length} style={{width:"100%",padding:"14px",marginTop:8,background:Object.keys(matchSelections).length>=quizData.terms.length?"rgba(34,197,94,0.15)":"rgba(15,20,35,0.5)",border:"1px solid "+(Object.keys(matchSelections).length>=quizData.terms.length?"rgba(34,197,94,0.3)":"rgba(255,255,255,0.06)"),borderRadius:12,color:Object.keys(matchSelections).length>=quizData.terms.length?"#86efac":"#4a5568",fontSize:14,fontWeight:600,cursor:Object.keys(matchSelections).length>=quizData.terms.length?"pointer":"default"}}>Check Answers</button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // ===== EDIT GUIDE =====
-  if (view==="editGuide"&&activeTest) {
-    var info = getSubjectInfo(activeTest.topic+" "+activeTest.subject);
-    var guide = activeTest.studyGuide||[];
-    return (
-      <div className="fade-up">
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
-          <button onClick={()=>{setView("home");setEditIdx(null);}} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
-          <div>
-            <div style={{fontSize:16,fontWeight:600}}>{activeTest.topic}</div>
-            <div style={{fontSize:12,color:"#9ca3af"}}>{info.emoji} Study Material · {guide.length} item{guide.length!==1?"s":""}</div>
+    return<div className="fade-up" style={{paddingBottom:40}}>
+      {showConfetti&&<Confetti/>}
+      {/* Nav */}
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
+        <button onClick={()=>{go("home");setQt(null);setShowConfetti(false)}} style={{width:40,height:40,borderRadius:10,background:"var(--bg-2)",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" strokeWidth="2.5" strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <div style={{flex:1}}>
+          <div style={{fontSize:16,fontWeight:700}}>{at?.topic||"Quiz"}</div>
+          <div style={{fontSize:12,color:"var(--text-2)",fontWeight:600}}>
+            {qt==="mc"?"Multiple Choice":qt==="tf"?"True or False":qt==="fill"?"Fill in the Blank":"Matching"}
           </div>
         </div>
-
-        {guide.map((item,i) => {
-          if (editIdx===i) return (
-            <div key={i} style={{background:"rgba(59,130,246,0.08)",border:"1px solid rgba(59,130,246,0.25)",borderRadius:12,padding:14,marginBottom:8}}>
-              <input value={editTerm} onChange={e=>setEditTerm(e.target.value)} placeholder="Term" style={{...inputStyle,marginBottom:8,fontSize:13}} />
-              <textarea value={editDef} onChange={e=>setEditDef(e.target.value)} placeholder="Definition" rows={2} style={{...inputStyle,fontSize:13,resize:"vertical"}} />
-              <div style={{display:"flex",gap:8,marginTop:8}}>
-                <button onClick={()=>updateGuideItem(i)} style={{padding:"6px 14px",background:"rgba(34,197,94,0.2)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:8,color:"#86efac",fontSize:12,cursor:"pointer"}}>Save</button>
-                <button onClick={()=>setEditIdx(null)} style={{padding:"6px 14px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:8,color:"#9ca3af",fontSize:12,cursor:"pointer"}}>Cancel</button>
-              </div>
-            </div>
-          );
-          return (
-            <div key={i} style={{background:"rgba(0,0,0,0.2)",borderRadius:10,padding:"10px 12px",marginBottom:6,display:"flex",alignItems:"flex-start",gap:10}}>
-              <div style={{flex:1}}>
-                <div style={{fontSize:13,fontWeight:600,color:info.accent}}>{item.term}</div>
-                <div style={{fontSize:12,color:"#9ca3af",marginTop:2,lineHeight:1.4}}>{item.def}</div>
-              </div>
-              <div style={{display:"flex",gap:6,flexShrink:0}}>
-                <button onClick={()=>{setEditIdx(i);setEditTerm(item.term);setEditDef(item.def);}} style={{background:"none",border:"none",color:"#6b8db5",cursor:"pointer",fontSize:14,padding:2}}>✏️</button>
-                <button onClick={()=>deleteGuideItem(i)} style={{background:"none",border:"none",color:"#6b8db5",cursor:"pointer",fontSize:14,padding:2}}>🗑️</button>
-              </div>
-            </div>
-          );
-        })}
-
-        <div style={{background:"rgba(34,197,94,0.06)",border:"1px dashed rgba(34,197,94,0.25)",borderRadius:12,padding:14,marginTop:12}}>
-          <div style={{fontSize:12,color:"#86efac",fontWeight:600,marginBottom:8}}>+ Add Study Material</div>
-          <input value={newTerm} onChange={e=>setNewTerm(e.target.value)} placeholder="Term (e.g. Scarcity)" style={{...inputStyle,marginBottom:8,fontSize:13}} />
-          <textarea value={newDef} onChange={e=>setNewDef(e.target.value)} placeholder="Definition..." rows={2} style={{...inputStyle,fontSize:13,resize:"vertical"}} />
-          <button onClick={addGuideItem} disabled={!newTerm.trim()||!newDef.trim()} style={{marginTop:8,padding:"8px 18px",background:(newTerm.trim()&&newDef.trim())?"rgba(34,197,94,0.2)":"rgba(15,20,35,0.5)",border:"1px solid "+((newTerm.trim()&&newDef.trim())?"rgba(34,197,94,0.3)":"rgba(255,255,255,0.06)"),borderRadius:8,color:(newTerm.trim()&&newDef.trim())?"#86efac":"#4a5568",fontSize:13,fontWeight:600,cursor:(newTerm.trim()&&newDef.trim())?"pointer":"default"}}>Add</button>
-        </div>
-      </div>
-    );
-  }
-
-  // ===== HOME =====
-  return (
-    <div>
-      {/* Header */}
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
-        <div style={{display:"flex",alignItems:"center",gap:14}}>
-          <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#f59e0b,#d97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,fontWeight:700,color:"#fff",boxShadow:"0 4px 16px rgba(245,158,11,0.3)"}}>O</div>
-          <div>
-            <h1 style={{margin:0,fontSize:20,fontWeight:700,letterSpacing:"-0.3px"}}>Omar's Learning Center</h1>
-            <p style={{margin:0,fontSize:13,color:"#9ca3af"}}>3rd Grade · Cedar Hill Prep</p>
-          </div>
-        </div>
-        <button onClick={()=>setShowHelp(!showHelp)} style={{background:"none",border:"none",color:"#6b8db5",fontSize:20,cursor:"pointer",padding:4}} title="How to use">❓</button>
+        {!done&&qt!=="match"&&<Pill color={si.accent||"var(--blue)"}>{qi+1} / {total}</Pill>}
       </div>
 
-      {/* Help panel */}
-      {showHelp&&(
-        <div className="fade-up" style={{background:"rgba(59,130,246,0.08)",border:"1px solid rgba(59,130,246,0.2)",borderRadius:14,padding:16,marginBottom:20,fontSize:13,lineHeight:1.6,color:"#b0bec5"}}>
-          <div style={{fontWeight:600,color:"#93c5fd",marginBottom:8,fontSize:14}}>How to Use</div>
-          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>📸 Photo a study guide</strong> → Send it to Mom/Dad in Claude → They update the Learning Center</div>
-          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>+ Add Test</strong> → Manually add a new test with subject, topic, and date</div>
-          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>📧 Paste Email</strong> → Paste a teacher email and AI extracts the test info</div>
-          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>✏️ Edit Study Material</strong> → Add, edit, or delete vocab terms for any test</div>
-          <div style={{marginBottom:8}}><strong style={{color:"#e2e8f0"}}>🧠 Quiz Me</strong> → 4 quiz types to practice: Multiple Choice, True/False, Fill in Blank, Matching</div>
-          <div><strong style={{color:"#e2e8f0"}}>📋 Study Plan</strong> → Generates a day-by-day study schedule with 15–20 min sessions</div>
-          <button onClick={()=>setShowHelp(false)} style={{marginTop:10,background:"none",border:"none",color:"#6b8db5",fontSize:12,cursor:"pointer",textDecoration:"underline"}}>Close</button>
+      {/* Progress */}
+      {qt!=="match"&&<div style={{height:5,background:"var(--bg-2)",borderRadius:4,marginBottom:24,overflow:"hidden"}}><div style={{height:"100%",borderRadius:4,background:`linear-gradient(90deg,${si.accent||"var(--blue)"},var(--purple))`,width:pct+"%",transition:"width .4s cubic-bezier(.4,0,.2,1)"}}/></div>}
+
+      {/* ── DONE ── */}
+      {done&&<div className="pop-in" style={{textAlign:"center",padding:"24px 16px"}}>
+        <div style={{fontSize:56,marginBottom:8}}>{sc>=total*0.8?"🌟":sc>=total*0.5?"💪":"📖"}</div>
+        <div style={{animation:"count-up .5s ease both",fontSize:40,fontWeight:800,background:`linear-gradient(135deg,${si.accent||"var(--amber)"},var(--purple))`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:4}}>{sc}/{total}</div>
+        <div style={{fontSize:15,color:"var(--text-1)",marginBottom:28,fontWeight:500}}>
+          {sc>=total*0.8?"Amazing job, Omar!":sc>=total*0.5?"Great effort! A few more to review.":"Keep practicing — you've got this!"}
         </div>
-      )}
-
-      {view==="home"&&(
-        <>
-          <div style={{display:"flex",gap:8,marginBottom:20}}>
-            <button onClick={()=>setView("add")} style={{flex:1,padding:"12px",background:"rgba(59,130,246,0.12)",border:"1px solid rgba(59,130,246,0.25)",borderRadius:12,color:"#93c5fd",fontSize:13,fontWeight:600,cursor:"pointer"}}>+ Add Test</button>
-            <button onClick={()=>setView("paste")} style={{flex:1,padding:"12px",background:"rgba(168,85,247,0.12)",border:"1px solid rgba(168,85,247,0.25)",borderRadius:12,color:"#c4b5fd",fontSize:13,fontWeight:600,cursor:"pointer"}}>📧 Paste Email</button>
-          </div>
-
-          {upcoming.length>0&&(
-            <>
-              <h2 style={{margin:"0 0 12px",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:"#9ca3af"}}>Upcoming Tests ({upcoming.length})</h2>
-              {upcoming.map(test => {
-                var info = getSubjectInfo(test.topic+" "+test.subject);
-                var days = daysUntil(test.date);
-                var sel = selectedTest===test.id;
-                var hasGuide = test.studyGuide&&test.studyGuide.length>0;
-                var count = hasGuide?test.studyGuide.length:0;
-                return (
-                  <div key={test.id} onClick={()=>setSelectedTest(sel?null:test.id)} className="fade-up" style={{
-                    background:"linear-gradient(135deg,"+info.color+","+info.color+"ee)",
-                    border:"1px solid "+info.border, borderLeft:"4px solid "+urgColor(days),
-                    borderRadius:14, padding:16, marginBottom:10, cursor:"pointer",
-                  }}>
-                    <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between"}}>
-                      <div style={{flex:1}}>
-                        <div style={{fontSize:16,fontWeight:600,marginBottom:4}}>{test.topic||test.subject}</div>
-                        <div style={{fontSize:12,color:"#9ca3af"}}>
-                          {info.emoji} {info.label} · {fmtDate(test.date)}
-                          {hasGuide&&<span style={{color:info.accent}}> · {count} terms</span>}
-                        </div>
-                        {days!==null&&days>=0&&days<=3&&<div style={{fontSize:11,color:urgColor(days),fontWeight:600,marginTop:4}}>{days===0?"Today!":days===1?"Tomorrow":"Soon"}</div>}
-                      </div>
-                      {days!==null&&days>=0&&(
-                        <div style={{background:urgColor(days)+"18",border:"1px solid "+urgColor(days)+"44",borderRadius:10,padding:"6px 12px",textAlign:"center",minWidth:48}}>
-                          <div style={{fontSize:20,fontWeight:700,color:urgColor(days),lineHeight:1}}>{days}</div>
-                          <div style={{fontSize:9,color:"#9ca3af",textTransform:"uppercase",letterSpacing:1}}>days</div>
-                        </div>
-                      )}
-                    </div>
-
-                    {sel&&(
-                      <div style={{marginTop:12,paddingTop:12,borderTop:"1px solid "+info.border+"44"}}>
-                        {test.notes&&<div style={{fontSize:13,color:"#b0bec5",marginBottom:10}}>📌 {test.notes}</div>}
-                        <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:hasGuide?12:0}}>
-                          <button onClick={e=>{e.stopPropagation();setActiveTestId(test.id);setView("editGuide");setEditIdx(null);setNewTerm("");setNewDef("");}} style={{padding:"7px 14px",background:"rgba(34,197,94,0.15)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:8,color:"#86efac",fontSize:12,fontWeight:600,cursor:"pointer"}}>
-                            ✏️ {hasGuide?"Edit":"Add"} Study Material
-                          </button>
-                          <button onClick={e=>{e.stopPropagation();deleteTest(test.id);}} style={{padding:"7px 14px",background:"rgba(239,68,68,0.1)",border:"1px solid rgba(239,68,68,0.2)",borderRadius:8,color:"#fca5a5",fontSize:12,cursor:"pointer"}}>Remove</button>
-                        </div>
-                        {hasGuide&&count>=2&&(
-                          <div>
-                            <div style={{fontSize:11,color:"#9ca3af",textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>Quiz Me</div>
-                            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
-                              {[{type:"mc",label:"Multiple Choice",icon:"🔘"},{type:"tf",label:"True / False",icon:"✅"},{type:"fill",label:"Fill in Blank",icon:"✍️"},{type:"match",label:"Matching",icon:"🔗"}].map(qt => (
-                                <button key={qt.type} onClick={e=>{e.stopPropagation();startQuiz(test.id,qt.type);}} style={{padding:"10px 8px",background:"rgba(139,92,246,0.1)",border:"1px solid rgba(139,92,246,0.25)",borderRadius:10,color:"#c4b5fd",fontSize:12,fontWeight:500,cursor:"pointer",textAlign:"center"}}>
-                                  {qt.icon} {qt.label}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </>
-          )}
-
-          {upcoming.length===0&&(
-            <div style={{background:"rgba(15,20,35,0.6)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:16,padding:24,textAlign:"center",marginBottom:20}}>
-              <div style={{fontSize:32,marginBottom:8}}>🎉</div>
-              <div style={{fontWeight:600}}>No upcoming tests</div>
-              <div style={{fontSize:13,color:"#6b8db5",marginTop:4}}>Add one with the buttons above</div>
-            </div>
-          )}
-
-          {upcoming.length>0&&(
-            <button onClick={generatePlan} disabled={planLoading} style={{width:"100%",padding:"14px",marginTop:4,marginBottom:20,background:planLoading?"rgba(34,197,94,0.08)":"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.08))",border:"1px solid rgba(34,197,94,0.3)",borderRadius:14,color:"#86efac",fontSize:14,fontWeight:600,cursor:planLoading?"wait":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
-              {planLoading?<><span style={{display:"inline-block",width:16,height:16,border:"2px solid #86efac",borderTopColor:"transparent",borderRadius:"50%",animation:"spin 0.8s linear infinite"}} /> Generating...</>:<>{studyPlan?"🔄 Regenerate":"📋 Generate"} Study Plan</>}
-            </button>
-          )}
-
-          {studyPlan&&Array.isArray(studyPlan)&&(
-            <div>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
-                <h2 style={{margin:0,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:"#9ca3af"}}>Study Plan</h2>
-                <button onClick={()=>{setStudyPlan(null);localStorage.removeItem(PLAN_KEY);}} style={{background:"none",border:"none",color:"#6b8db5",fontSize:11,cursor:"pointer",textDecoration:"underline"}}>Clear</button>
-              </div>
-              {studyPlan.map((day,di) => (
-                <div key={di} style={{background:"rgba(15,20,35,0.6)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:12,padding:14,marginBottom:8}}>
-                  <div style={{fontSize:13,fontWeight:600,color:"#93c5fd",marginBottom:8}}>{day.dayLabel||fmtDate(day.day)}</div>
-                  {(day.tasks||[]).map((task,ti) => {
-                    var ti2 = getSubjectInfo(task.subject);
-                    return <div key={ti} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",borderTop:ti>0?"1px solid rgba(255,255,255,0.04)":"none"}}>
-                      <span style={{fontSize:15}}>{ti2.emoji}</span>
-                      <div style={{flex:1}}>
-                        <div style={{fontSize:13,fontWeight:500}}>{task.activity}</div>
-                        <div style={{fontSize:11,color:"#6b8db5",marginTop:2}}>{task.duration} · {task.subject}</div>
-                      </div>
-                    </div>;
-                  })}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {past.length>0&&(
-            <div style={{marginTop:24}}>
-              <h2 style={{margin:"0 0 10px",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:"#4a5568"}}>Past Tests ({past.length})</h2>
-              {past.map(test => {
-                var info = getSubjectInfo(test.topic+" "+test.subject);
-                return <div key={test.id} style={{background:"rgba(15,20,35,0.3)",border:"1px solid rgba(255,255,255,0.04)",borderRadius:10,padding:12,marginBottom:6,opacity:0.6,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                  <div><div style={{fontSize:13,fontWeight:500}}>{info.emoji} {test.topic}</div><div style={{fontSize:11,color:"#4a5568"}}>{fmtDate(test.date)}</div></div>
-                  <button onClick={()=>deleteTest(test.id)} style={{background:"none",border:"none",color:"#4a5568",cursor:"pointer",fontSize:16}}>×</button>
-                </div>;
-              })}
-            </div>
-          )}
-        </>
-      )}
-
-      {/* ADD TEST */}
-      {view==="add"&&(
-        <div className="fade-up">
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
-            <button onClick={()=>setView("home")} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
-            <h2 style={{margin:0,fontSize:17,fontWeight:600}}>Add Test</h2>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",gap:14}}>
-            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Subject</label>
-              <select value={newTest.subject} onChange={e=>setNewTest(p=>({...p,subject:e.target.value}))} style={{...inputStyle}}><option value="">Select subject...</option><option value="Math & Science">🔬 Math & Science</option><option value="Spanish">🇪🇸 Spanish</option><option value="ELA / Reading">📖 ELA / Reading</option><option value="Social Studies">🌍 Social Studies</option></select></div>
-            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Topic</label>
-              <input value={newTest.topic} onChange={e=>setNewTest(p=>({...p,topic:e.target.value}))} placeholder="e.g. Fractions" style={inputStyle} /></div>
-            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Test Date</label>
-              <input type="date" value={newTest.date} onChange={e=>setNewTest(p=>({...p,date:e.target.value}))} style={{...inputStyle,colorScheme:"dark"}} /></div>
-            <div><label style={{fontSize:12,color:"#9ca3af",display:"block",marginBottom:6}}>Notes (optional)</label>
-              <textarea value={newTest.notes} onChange={e=>setNewTest(p=>({...p,notes:e.target.value}))} placeholder="What to review..." rows={3} style={{...inputStyle,resize:"vertical"}} /></div>
-            <button onClick={addTest} disabled={!newTest.topic.trim()} style={{padding:"14px",background:newTest.topic.trim()?"linear-gradient(135deg,#1a5a3a,#0f4a2a)":"rgba(15,20,35,0.5)",border:"1px solid "+(newTest.topic.trim()?"rgba(34,197,94,0.4)":"rgba(255,255,255,0.06)"),borderRadius:12,color:newTest.topic.trim()?"#86efac":"#4a5568",fontSize:15,fontWeight:600,cursor:newTest.topic.trim()?"pointer":"default"}}>Add Test</button>
-          </div>
+        <div style={{display:"flex",gap:10,justifyContent:"center"}}>
+          <button onClick={()=>{setShowConfetti(false);startQ(activeId,qt)}} style={{padding:"12px 24px",background:si.accent+"18",border:"1.5px solid "+si.accent+"40",borderRadius:12,color:si.accent,fontSize:14,fontWeight:700}}>Try Again</button>
+          <button onClick={()=>{go("home");setQt(null);setShowConfetti(false)}} style={{padding:"12px 24px",background:"var(--bg-2)",border:"1.5px solid var(--border-subtle)",borderRadius:12,color:"var(--text-1)",fontSize:14,fontWeight:700}}>Done</button>
         </div>
-      )}
+      </div>}
 
-      {/* PASTE */}
-      {view==="paste"&&(
-        <div className="fade-up">
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
-            <button onClick={()=>{setView("home");setEmailText("");}} style={{background:"none",border:"none",color:"#93c5fd",fontSize:22,cursor:"pointer",padding:0}}>←</button>
-            <h2 style={{margin:0,fontSize:17,fontWeight:600}}>Extract from Email</h2>
-          </div>
-          <p style={{fontSize:13,color:"#9ca3af",margin:"0 0 14px",lineHeight:1.5}}>Paste a teacher email or study guide. AI extracts tests and vocab automatically.</p>
-          <textarea value={emailText} onChange={e=>setEmailText(e.target.value)} placeholder="Paste email or study guide here..." rows={8} style={{...inputStyle,fontSize:13,resize:"vertical",lineHeight:1.6,border:"1px solid rgba(168,85,247,0.2)"}} />
-          <button onClick={extractFromEmail} disabled={extracting||emailText.trim().length<20} style={{width:"100%",padding:"14px",marginTop:12,background:emailText.trim().length>=20?"linear-gradient(135deg,rgba(168,85,247,0.2),rgba(168,85,247,0.1))":"rgba(15,20,35,0.5)",border:"1px solid "+(emailText.trim().length>=20?"rgba(168,85,247,0.4)":"rgba(255,255,255,0.06)"),borderRadius:12,color:emailText.trim().length>=20?"#c4b5fd":"#4a5568",fontSize:15,fontWeight:600,cursor:emailText.trim().length>=20?"pointer":"default",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
-            {extracting?<><span style={{display:"inline-block",width:16,height:16,border:"2px solid #c4b5fd",borderTopColor:"transparent",borderRadius:"50%",animation:"spin 0.8s linear infinite"}} /> Extracting...</>:"Extract Tests"}
-          </button>
+      {/* ── MC ── */}
+      {qt==="mc"&&showing&&<div key={qi} className="fade-up">
+        <div style={{background:si.accent+"0d",border:"1.5px solid "+si.accent+"25",borderRadius:20,padding:"24px 20px",marginBottom:18,textAlign:"center"}}>
+          <div style={{fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:si.accent,opacity:0.7,marginBottom:8}}>Define</div>
+          <div style={{fontSize:22,fontWeight:800,letterSpacing:"-0.3px"}}>{qd[qi].term}</div>
         </div>
-      )}
+        <div style={{display:"flex",flexDirection:"column",gap:8}}>
+          {qd[qi].opts.map((o,i)=>{
+            let bg="var(--bg-2)",bdr="rgba(255,255,255,0.06)";
+            if(ans&&o.c){bg="var(--green-dim)";bdr="var(--green-mid)"}
+            else if(ans&&ua===i&&!o.c){bg="var(--red-dim)";bdr="var(--red-mid)"}
+            return<button key={i} onClick={()=>{if(ans)return;setAns(true);setUa(i);if(o.c)setSc(s=>s+1)}} style={{padding:"14px 16px",background:bg,border:"1.5px solid "+bdr,borderRadius:12,color:"var(--text-0)",fontSize:14,textAlign:"left",lineHeight:1.45,fontWeight:500,transition:"all .15s",minHeight:48}}>
+              {ans&&o.c&&<span style={{marginRight:6}}>✅</span>}{ans&&ua===i&&!o.c&&<span style={{marginRight:6}}>❌</span>}{o.t}
+            </button>})}
+        </div>
+        {ans&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",marginTop:16,background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
+        {ans&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",marginTop:16,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
+      </div>}
 
-      <div style={{textAlign:"center",marginTop:32,fontSize:11,color:"#4a5568"}}>Built with care · Add new topics anytime</div>
+      {/* ── TF ── */}
+      {qt==="tf"&&showing&&<div key={qi} className="fade-up">
+        <div style={{background:si.accent+"0d",border:"1.5px solid "+si.accent+"25",borderRadius:18,padding:"22px 20px",marginBottom:12,textAlign:"center"}}>
+          <div style={{fontSize:13,color:si.accent,fontWeight:600,marginBottom:8}}>Is this the correct definition of</div>
+          <div style={{fontSize:20,fontWeight:800,marginBottom:14}}>{qd[qi].term}?</div>
+          <div style={{fontSize:14,color:"var(--text-1)",lineHeight:1.5,fontStyle:"italic",padding:"12px 16px",background:"rgba(0,0,0,0.15)",borderRadius:10}}>"{qd[qi].shown}"</div>
+        </div>
+        {ans&&<div style={{textAlign:"center",padding:8,fontSize:14,fontWeight:600,color:ua===qd[qi].c?"var(--green)":"var(--red)"}}>{ua===qd[qi].c?"✅ Correct!":"❌ Not quite"}</div>}
+        <div style={{display:"flex",gap:10}}>
+          {[true,false].map(v=>{
+            let bg="var(--bg-2)",bdr="rgba(255,255,255,0.06)";
+            if(ans&&v===qd[qi].c){bg="var(--green-dim)";bdr="var(--green-mid)"}
+            else if(ans&&ua===v&&v!==qd[qi].c){bg="var(--red-dim)";bdr="var(--red-mid)"}
+            return<button key={""+v} onClick={()=>{if(ans)return;setAns(true);setUa(v);if(v===qd[qi].c)setSc(s=>s+1)}} style={{flex:1,padding:"18px",background:bg,border:"1.5px solid "+bdr,borderRadius:14,color:"var(--text-0)",fontSize:17,fontWeight:700,minHeight:56}}>
+              {v?"👍 True":"👎 False"}</button>})}
+        </div>
+        {ans&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",marginTop:16,background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
+        {ans&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",marginTop:16,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
+      </div>}
+
+      {/* ── FILL ── */}
+      {qt==="fill"&&showing&&<div key={qi} className="fade-up">
+        <div style={{background:si.accent+"0d",border:"1.5px solid "+si.accent+"25",borderRadius:18,padding:"22px 20px",marginBottom:18}}>
+          <div style={{fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:si.accent,opacity:0.7,marginBottom:8}}>Name this term</div>
+          <div style={{fontSize:15,color:"var(--text-0)",lineHeight:1.55,fontWeight:500}}>{qd[qi].def}</div>
+        </div>
+        <input ref={fiRef} value={fi} onChange={e=>setFi(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!ans)chkFill()}} placeholder="Type your answer..." disabled={ans} style={{marginBottom:10,opacity:ans?0.5:1,fontSize:16}} autoFocus />
+        {ans&&<div style={{padding:"12px 16px",marginBottom:10,borderRadius:10,background:ua?"var(--green-dim)":"var(--red-dim)",border:"1.5px solid "+(ua?"var(--green-mid)":"var(--red-mid)"),fontSize:14,fontWeight:600}}>{ua?"✅ Correct!":
+          <span>❌ Answer: <strong style={{color:"var(--text-0)"}}>{qd[qi].term}</strong></span>}</div>}
+        {!ans&&<button onClick={chkFill} disabled={!fi.trim()} style={{width:"100%",padding:"14px",background:fi.trim()?si.accent+"18":"var(--bg-2)",border:"1.5px solid "+(fi.trim()?si.accent+"35":"rgba(255,255,255,0.06)"),borderRadius:12,color:fi.trim()?si.accent:"var(--text-3)",fontSize:15,fontWeight:700}}>Check</button>}
+        {ans&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
+        {ans&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
+      </div>}
+
+      {/* ── MATCH ── */}
+      {qt==="match"&&!msub&&<div className="fade-up">
+        <div style={{fontSize:13,color:"var(--text-2)",marginBottom:16,fontWeight:500}}>Match each term with its definition.</div>
+        {qd.terms.map((term,i)=>{const matched=ms[term];return<div key={i} style={{marginBottom:14}}>
+          <div style={{fontSize:15,fontWeight:700,color:si.accent,marginBottom:6}}>{term}</div>
+          <select value={matched||""} onChange={e=>setMs(s=>({...s,[term]:e.target.value}))} style={{fontSize:14}}>
+            <option value="">Choose...</option>
+            {qd.defs.map((d,j)=><option key={j} value={d}>{d.length>55?d.slice(0,52)+"...":d}</option>)}
+          </select>
+        </div>})}
+        <button onClick={chkMatch} disabled={Object.keys(ms).length<qd.terms.length} style={{width:"100%",padding:"14px",marginTop:8,background:Object.keys(ms).length>=qd.terms.length?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+(Object.keys(ms).length>=qd.terms.length?"var(--green-mid)":"rgba(255,255,255,0.06)"),borderRadius:12,color:Object.keys(ms).length>=qd.terms.length?"var(--green)":"var(--text-3)",fontSize:15,fontWeight:700}}>Check</button>
+      </div>}
     </div>
-  );
+  }
+
+  /* ═══════════ EDIT GUIDE ═══════════ */
+  if(view==="edit"&&at){
+    const si=getSub(at.topic+" "+at.subject);const g=at.studyGuide||[];
+    return<div className="fade-up">
+      <BackBtn onClick={()=>{go("detail",activeId);setEi(null)}} label="Back to test"/>
+      <div style={{marginBottom:20}}>
+        <div style={{fontSize:18,fontWeight:800}}>{at.topic}</div>
+        <div style={{fontSize:13,color:"var(--text-2)",fontWeight:600,marginTop:2}}>{si.emoji} {g.length} term{g.length!==1?"s":""}</div>
+      </div>
+
+      {g.map((item,i)=>{
+        if(ei===i)return<div key={i} className="fade-in" style={{background:"var(--blue-dim)",border:"1.5px solid var(--blue-mid)",borderRadius:14,padding:16,marginBottom:8}}>
+          <input value={et} onChange={e=>setEt(e.target.value)} placeholder="Term" style={{marginBottom:8}} />
+          <textarea value={ed} onChange={e=>setEd(e.target.value)} placeholder="Definition" rows={2} />
+          <div style={{display:"flex",gap:8,marginTop:10}}>
+            <button onClick={()=>updG(i)} style={{padding:"8px 18px",background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:8,color:"var(--green)",fontSize:13,fontWeight:700}}>Save</button>
+            <button onClick={()=>setEi(null)} style={{padding:"8px 18px",background:"var(--bg-2)",border:"1.5px solid rgba(255,255,255,0.08)",borderRadius:8,color:"var(--text-2)",fontSize:13,fontWeight:600}}>Cancel</button>
+          </div>
+        </div>;
+        return<div key={i} style={{background:"var(--bg-2)",borderRadius:12,padding:"12px 14px",marginBottom:6,display:"flex",alignItems:"flex-start",gap:10}}>
+          <div style={{flex:1}}>
+            <div style={{fontSize:14,fontWeight:700,color:si.accent}}>{item.term}</div>
+            <div style={{fontSize:13,color:"var(--text-2)",marginTop:3,lineHeight:1.45}}>{item.def}</div>
+          </div>
+          <div style={{display:"flex",gap:4,flexShrink:0,marginTop:2}}>
+            <button onClick={()=>{setEi(i);setEt(item.term);setEd(item.def)}} style={{width:32,height:32,borderRadius:8,background:"var(--bg-3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14}}>✏️</button>
+            <button onClick={()=>delG(i)} style={{width:32,height:32,borderRadius:8,background:"var(--bg-3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14}}>🗑️</button>
+          </div>
+        </div>})}
+
+      <div style={{background:"var(--green-dim)",border:"1.5px dashed var(--green-mid)",borderRadius:14,padding:16,marginTop:16}}>
+        <div style={{fontSize:13,fontWeight:700,color:"var(--green)",marginBottom:10}}>+ New Term</div>
+        <input value={nt} onChange={e=>setNt(e.target.value)} placeholder="Term" style={{marginBottom:8}} />
+        <textarea value={nd} onChange={e=>setNd(e.target.value)} placeholder="Definition" rows={2} />
+        <button onClick={addG} disabled={!nt.trim()||!nd.trim()} style={{marginTop:10,padding:"10px 22px",background:(nt.trim()&&nd.trim())?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+((nt.trim()&&nd.trim())?"var(--green-mid)":"rgba(255,255,255,0.06)"),borderRadius:10,color:(nt.trim()&&nd.trim())?"var(--green)":"var(--text-3)",fontSize:14,fontWeight:700}}>Add</button>
+      </div>
+    </div>
+  }
+
+  /* ═══════════ TEST DETAIL ═══════════ */
+  if(view==="detail"&&at){
+    const si=getSub(at.topic+" "+at.subject);const g=at.studyGuide||[];const days=daysTo(at.date);const hasG=g.length>0;
+    return<div className="fade-up">
+      <BackBtn onClick={()=>go("home")} label="All tests"/>
+      <div style={{background:si.gradient,border:"1.5px solid "+si.border,borderRadius:18,padding:"20px 18px",marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:12,right:14}}><Badge days={days}/></div>
+        <Pill color={si.accent} style={{marginBottom:10}}>{si.tag}</Pill>
+        <div style={{fontSize:20,fontWeight:800,marginBottom:4,maxWidth:"70%"}}>{at.topic}</div>
+        <div style={{fontSize:13,color:"var(--text-2)",fontWeight:500}}>{si.emoji} {si.label} · {fDate(at.date)}</div>
+        {at.notes&&<div style={{fontSize:13,color:"var(--text-1)",marginTop:12,lineHeight:1.5,padding:"10px 12px",background:"rgba(0,0,0,0.2)",borderRadius:10}}>📌 {at.notes}</div>}
+      </div>
+
+      {/* Tabs */}
+      <div style={{display:"flex",gap:4,marginBottom:16,background:"var(--bg-1)",borderRadius:12,padding:4}}>
+        {[{k:"guide",l:"📖 Study Guide"},{k:"quiz",l:"🧠 Quiz Me"}].map(tab=>
+          <button key={tab.k} onClick={()=>setDetailTab(tab.k)} style={{flex:1,padding:"10px 8px",borderRadius:10,background:detailTab===tab.k?"var(--bg-3)":"transparent",color:detailTab===tab.k?"var(--text-0)":"var(--text-2)",fontSize:13,fontWeight:600,transition:"all .2s"}}>{tab.l}</button>
+        )}
+      </div>
+
+      {detailTab==="guide"&&<div className="fade-in">
+        {hasG?<>
+          {g.map((item,i)=><div key={i} style={{background:"var(--bg-2)",borderRadius:12,padding:"12px 14px",marginBottom:6,borderLeft:"3px solid "+si.accent}}>
+            <div style={{fontSize:14,fontWeight:700,color:si.accent}}>{item.term}</div>
+            <div style={{fontSize:13,color:"var(--text-2)",marginTop:3,lineHeight:1.45}}>{item.def}</div>
+          </div>)}
+        </>:<div style={{textAlign:"center",padding:"24px 16px",color:"var(--text-3)"}}>
+          <div style={{fontSize:28,marginBottom:8}}>📝</div>
+          <div style={{fontWeight:600,marginBottom:4}}>No study material yet</div>
+          <div style={{fontSize:13}}>Add terms and definitions to start quizzing</div>
+        </div>}
+        <button onClick={()=>{go("edit",at.id);setNt("");setNd("");setEi(null)}} style={{width:"100%",padding:"14px",marginTop:12,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:14,fontWeight:700}}>✏️ {hasG?"Edit":"Add"} Study Material</button>
+      </div>}
+
+      {detailTab==="quiz"&&<div className="fade-in">
+        {hasG&&g.length>=2?<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+          {[{t:"mc",l:"Multiple Choice",i:"🔘",d:"Pick the right answer"},{t:"tf",l:"True / False",i:"✅",d:"Is the definition correct?"},{t:"fill",l:"Fill in Blank",i:"✍️",d:"Type from memory"},{t:"match",l:"Matching",i:"🔗",d:"Connect terms & definitions"}].map(q=>
+            <button key={q.t} onClick={()=>startQ(at.id,q.t)} style={{padding:"18px 12px",background:si.accent+"0a",border:"1.5px solid "+si.accent+"22",borderRadius:14,textAlign:"center",transition:"all .15s"}}>
+              <div style={{fontSize:24,marginBottom:6}}>{q.i}</div>
+              <div style={{fontSize:13,fontWeight:700,color:"var(--text-0)",marginBottom:2}}>{q.l}</div>
+              <div style={{fontSize:11,color:"var(--text-3)",fontWeight:500}}>{q.d}</div>
+            </button>)}
+        </div>:<div style={{textAlign:"center",padding:"24px 16px",color:"var(--text-3)"}}>
+          <div style={{fontSize:28,marginBottom:8}}>🧠</div>
+          <div style={{fontWeight:600}}>Need at least 2 terms to quiz</div>
+          <div style={{fontSize:13,marginTop:4}}>Add study material first</div>
+        </div>}
+      </div>}
+
+      <button onClick={()=>delTest(at.id)} style={{width:"100%",padding:"12px",marginTop:24,background:"transparent",border:"1.5px solid var(--red-dim)",borderRadius:12,color:"var(--text-3)",fontSize:13,fontWeight:600}}>Remove Test</button>
+    </div>
+  }
+
+  /* ═══════════ ADD TEST ═══════════ */
+  if(view==="add")return<div className="fade-up">
+    <BackBtn onClick={()=>go("home")}/>
+    <h2 style={{fontSize:20,fontWeight:800,marginBottom:20}}>Add Test</h2>
+    <div style={{display:"flex",flexDirection:"column",gap:14}}>
+      <div><label style={{fontSize:12,color:"var(--text-2)",fontWeight:700,display:"block",marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>Subject</label>
+        <select value={form.subject} onChange={e=>setForm(p=>({...p,subject:e.target.value}))}><option value="">Select...</option>{SUBJECTS.map(s=><option key={s.label} value={s.label}>{s.emoji} {s.label}</option>)}</select></div>
+      <div><label style={{fontSize:12,color:"var(--text-2)",fontWeight:700,display:"block",marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>Topic</label>
+        <input value={form.topic} onChange={e=>setForm(p=>({...p,topic:e.target.value}))} placeholder="e.g. Fractions & Decimals"/></div>
+      <div><label style={{fontSize:12,color:"var(--text-2)",fontWeight:700,display:"block",marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>Test Date</label>
+        <input type="date" value={form.date} onChange={e=>setForm(p=>({...p,date:e.target.value}))}/></div>
+      <div><label style={{fontSize:12,color:"var(--text-2)",fontWeight:700,display:"block",marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>Notes</label>
+        <textarea value={form.notes} onChange={e=>setForm(p=>({...p,notes:e.target.value}))} placeholder="What to review..." rows={3}/></div>
+      <button onClick={addTest} disabled={!form.topic.trim()} style={{padding:"16px",marginTop:4,background:form.topic.trim()?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+(form.topic.trim()?"var(--green-mid)":"rgba(255,255,255,0.06)"),borderRadius:14,color:form.topic.trim()?"var(--green)":"var(--text-3)",fontSize:16,fontWeight:700}}>Add Test</button>
+    </div>
+  </div>;
+
+  /* ═══════════ PASTE ═══════════ */
+  if(view==="paste")return<div className="fade-up">
+    <BackBtn onClick={()=>{go("home");setEmail("")}}/>
+    <h2 style={{fontSize:20,fontWeight:800,marginBottom:8}}>Extract from Email</h2>
+    <p style={{fontSize:13,color:"var(--text-2)",marginBottom:16,lineHeight:1.5}}>Paste a teacher email or study guide. AI will pull out tests and vocab.</p>
+    <textarea value={email} onChange={e=>setEmail(e.target.value)} placeholder="Paste content here..." rows={8} style={{border:"1.5px solid var(--purple-mid)",lineHeight:1.6}}/>
+    <button onClick={extract} disabled={extracting||email.trim().length<20} style={{width:"100%",padding:"16px",marginTop:12,background:email.trim().length>=20?"var(--purple-dim)":"var(--bg-2)",border:"1.5px solid "+(email.trim().length>=20?"var(--purple-mid)":"rgba(255,255,255,0.06)"),borderRadius:14,color:email.trim().length>=20?"var(--purple)":"var(--text-3)",fontSize:16,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+      {extracting?<><Spinner color="var(--purple)"/> Extracting...</>:"Extract Tests"}
+    </button>
+  </div>;
+
+  /* ═══════════ HOME ═══════════ */
+  return<div>
+    {/* Header */}
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
+      <div style={{display:"flex",alignItems:"center",gap:14}}>
+        <div style={{width:50,height:50,borderRadius:16,background:"linear-gradient(135deg,#f5a623,#e08a10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,fontWeight:800,color:"#fff",boxShadow:"0 4px 20px rgba(245,166,35,0.35)",letterSpacing:"-1px"}}>O</div>
+        <div>
+          <h1 style={{fontSize:20,fontWeight:800,letterSpacing:"-0.3px",lineHeight:1.2}}>Omar's Learning Center</h1>
+          <p style={{fontSize:12,color:"var(--text-2)",fontWeight:600,marginTop:1}}>3rd Grade · Cedar Hill Prep</p>
+        </div>
+      </div>
+      <button onClick={()=>setShowHelp(!showHelp)} style={{width:36,height:36,borderRadius:10,background:"var(--bg-2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"var(--text-2)"}}>?</button>
+    </div>
+
+    {/* Help */}
+    {showHelp&&<div className="fade-up" style={{background:"var(--blue-dim)",border:"1.5px solid var(--blue-mid)",borderRadius:16,padding:18,marginBottom:20,fontSize:13,lineHeight:1.7,color:"var(--text-1)"}}>
+      <div style={{fontWeight:800,color:"var(--blue)",marginBottom:8,fontSize:15}}>How It Works</div>
+      <div style={{marginBottom:6}}><strong>📸 Photo a study guide</strong> → Send to Mom/Dad in Claude → Learning Center gets updated</div>
+      <div style={{marginBottom:6}}><strong>+ Add Test</strong> → Manually add with subject, topic, date</div>
+      <div style={{marginBottom:6}}><strong>📧 Paste Email</strong> → Paste teacher email, AI extracts test info</div>
+      <div style={{marginBottom:6}}><strong>✏️ Study Material</strong> → Add vocab terms and definitions</div>
+      <div style={{marginBottom:6}}><strong>🧠 Quiz Me</strong> → 4 quiz types to practice</div>
+      <div><strong>📋 Study Plan</strong> → AI-generated day-by-day study schedule</div>
+      <button onClick={()=>setShowHelp(false)} style={{marginTop:10,padding:"6px 14px",background:"var(--bg-2)",borderRadius:8,color:"var(--text-2)",fontSize:12,fontWeight:600}}>Got it</button>
+    </div>}
+
+    {/* Actions */}
+    <div style={{display:"flex",gap:8,marginBottom:24}}>
+      <button onClick={()=>go("add")} style={{flex:1,padding:"14px 12px",background:"var(--blue-dim)",border:"1.5px solid var(--blue-mid)",borderRadius:14,color:"var(--blue)",fontSize:14,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,minHeight:48}}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12h14"/></svg> Add Test
+      </button>
+      <button onClick={()=>go("paste")} style={{flex:1,padding:"14px 12px",background:"var(--purple-dim)",border:"1.5px solid var(--purple-mid)",borderRadius:14,color:"var(--purple)",fontSize:14,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,minHeight:48}}>
+        📧 Paste Email
+      </button>
+    </div>
+
+    {/* Tests */}
+    {upcoming.length>0&&<>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+        <h2 style={{fontSize:11,fontWeight:800,textTransform:"uppercase",letterSpacing:2,color:"var(--text-3)"}}>Upcoming · {upcoming.length}</h2>
+      </div>
+      {upcoming.map((t,idx)=>{const si=getSub(t.topic+" "+t.subject);const days=daysTo(t.date);const hasG=t.studyGuide?.length>0;
+        return<button key={t.id} onClick={()=>{setActiveId(t.id);setDetailTab("guide");go("detail",t.id)}} className="fade-up" style={{animationDelay:idx*50+"ms",width:"100%",background:si.gradient,border:"1.5px solid "+si.border,borderRadius:16,padding:"16px 14px",marginBottom:8,textAlign:"left",display:"flex",alignItems:"center",gap:14,transition:"transform .15s",position:"relative",overflow:"hidden"}}>
+          {days!==null&&days>=0&&days<=2&&<div style={{position:"absolute",top:0,left:0,right:0,height:3,background:`linear-gradient(90deg,${urgC(days)},transparent)`}}/>}
+          <div style={{width:44,height:44,borderRadius:12,background:si.accent+"15",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{si.emoji}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:15,fontWeight:700,marginBottom:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{t.topic}</div>
+            <div style={{fontSize:12,color:"var(--text-2)",fontWeight:500,display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+              <span>{fDate(t.date)}</span>
+              {hasG&&<Pill color={si.accent}>{t.studyGuide.length} terms</Pill>}
+            </div>
+          </div>
+          <Badge days={days}/>
+        </button>})}
+    </>}
+
+    {upcoming.length===0&&<div style={{background:"var(--bg-2)",borderRadius:18,padding:"36px 24px",textAlign:"center",marginBottom:20}}>
+      <div style={{fontSize:36,marginBottom:10}}>🎉</div>
+      <div style={{fontWeight:700,fontSize:16,marginBottom:4}}>No upcoming tests</div>
+      <div style={{fontSize:13,color:"var(--text-3)"}}>Add one with the buttons above</div>
+    </div>}
+
+    {/* Study Plan */}
+    {upcoming.length>0&&<button onClick={genPlan} disabled={planLoading} style={{width:"100%",padding:"16px",marginTop:4,marginBottom:20,background:planLoading?"var(--green-dim)":"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:14,color:"var(--green)",fontSize:15,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:8,minHeight:52}}>
+      {planLoading?<><Spinner color="var(--green)"/> Generating...</>:<>{plan?"🔄 Regenerate":"📋 Generate"} Study Plan</>}
+    </button>}
+
+    {plan&&Array.isArray(plan)&&<div className="fade-up">
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+        <h2 style={{fontSize:11,fontWeight:800,textTransform:"uppercase",letterSpacing:2,color:"var(--text-3)"}}>Study Plan</h2>
+        <button onClick={()=>{setPlan(null);localStorage.removeItem(PK)}} style={{padding:"4px 10px",borderRadius:8,background:"var(--bg-2)",color:"var(--text-3)",fontSize:11,fontWeight:600}}>Clear</button>
+      </div>
+      {plan.map((day,di)=><div key={di} style={{background:"var(--bg-2)",borderRadius:14,padding:14,marginBottom:8}}>
+        <div style={{fontSize:13,fontWeight:700,color:"var(--blue)",marginBottom:8}}>{day.dayLabel||fDate(day.day)}</div>
+        {(day.tasks||[]).map((task,ti)=>{const tsi=getSub(task.subject);return<div key={ti} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderTop:ti?"1px solid rgba(255,255,255,0.04)":"none"}}>
+          <span style={{fontSize:16,width:28,textAlign:"center"}}>{tsi.emoji}</span>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:600}}>{task.activity}</div>
+            <div style={{fontSize:11,color:"var(--text-3)",fontWeight:500,marginTop:2}}>{task.duration} · {task.subject}</div>
+          </div>
+        </div>})}
+      </div>)}
+    </div>}
+
+    {/* Past */}
+    {past.length>0&&<div style={{marginTop:24}}>
+      <h2 style={{fontSize:11,fontWeight:800,textTransform:"uppercase",letterSpacing:2,color:"var(--text-3)",marginBottom:10}}>Past · {past.length}</h2>
+      {past.map(t=>{const si=getSub(t.topic+" "+t.subject);return<div key={t.id} style={{background:"var(--bg-1)",borderRadius:12,padding:"10px 14px",marginBottom:4,opacity:0.5,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{display:"flex",alignItems:"center",gap:8}}><span>{si.emoji}</span><span style={{fontSize:13,fontWeight:600}}>{t.topic}</span></div>
+        <button onClick={()=>delTest(t.id)} style={{width:28,height:28,borderRadius:8,background:"var(--bg-2)",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text-3)",fontSize:14}}>×</button>
+      </div>})}
+    </div>}
+
+    <div style={{textAlign:"center",marginTop:32,fontSize:11,color:"var(--text-3)",fontWeight:500}}>Built with care · Add new topics anytime</div>
+  </div>;
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
