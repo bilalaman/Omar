@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Learning Center">
-<meta name="theme-color" content="#0c1017">
+<meta name="theme-color" content="#f4f3f0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <title>Omar's Learning Center</title>
@@ -16,16 +16,16 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg-0:#0c1017;--bg-1:#111621;--bg-2:#171d2b;--bg-3:#1e2536;
-  --surface:#1a2030;--surface-hover:#212940;
-  --text-0:#f1f3f8;--text-1:#c8cdd8;--text-2:#8891a5;--text-3:#5a6478;
-  --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);--amber-mid:rgba(245,166,35,0.25);
-  --green:#34d399;--green-dim:rgba(52,211,153,0.1);--green-mid:rgba(52,211,153,0.25);
-  --blue:#60a5fa;--blue-dim:rgba(96,165,250,0.1);--blue-mid:rgba(96,165,250,0.25);
-  --red:#f87171;--red-dim:rgba(248,113,113,0.1);--red-mid:rgba(248,113,113,0.25);
-  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.1);--purple-mid:rgba(167,139,250,0.25);
+  --bg-0:#f4f3f0;--bg-1:#eae9e5;--bg-2:#e0dfdb;--bg-3:#d4d3ce;
+  --surface:#eceae6;--surface-hover:#dfddd8;
+  --text-0:#2c2c2c;--text-1:#4a4a4a;--text-2:#7a7a7a;--text-3:#a0a0a0;
+  --amber:#b8860b;--amber-dim:rgba(184,134,11,0.08);--amber-mid:rgba(184,134,11,0.2);
+  --green:#3d7a4f;--green-dim:rgba(61,122,79,0.08);--green-mid:rgba(61,122,79,0.18);
+  --blue:#4a6fa5;--blue-dim:rgba(74,111,165,0.08);--blue-mid:rgba(74,111,165,0.18);
+  --red:#a63d3d;--red-dim:rgba(166,61,61,0.08);--red-mid:rgba(166,61,61,0.18);
+  --purple:#6b5b8a;--purple-dim:rgba(107,91,138,0.08);--purple-mid:rgba(107,91,138,0.18);
   --radius:14px;--radius-sm:10px;--radius-lg:20px;
-  --shadow:0 4px 24px rgba(0,0,0,0.35);
+  --shadow:0 1px 8px rgba(0,0,0,0.05);
   --font:'Nunito',system-ui,-apple-system,sans-serif;
   --mono:'JetBrains Mono',monospace;
   --safe-bottom:env(safe-area-inset-bottom,0px);
@@ -38,11 +38,11 @@ body{
 }
 #root{max-width:520px;margin:0 auto;padding:20px 16px calc(24px + var(--safe-bottom));position:relative}
 button{font-family:var(--font);-webkit-tap-highlight-color:transparent;cursor:pointer;border:none;background:none}
-input,select,textarea{font-family:var(--font);outline:none;-webkit-appearance:none;color:var(--text-0);background:var(--bg-2);border:1.5px solid rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:14px 16px;font-size:15px;width:100%;transition:border-color .2s}
-input:focus,select:focus,textarea:focus{border-color:rgba(96,165,250,0.5)}
-input[type="date"]{color-scheme:dark}
+input,select,textarea{font-family:var(--font);outline:none;-webkit-appearance:none;color:var(--text-0);background:#faf9f7;border:1.5px solid #cac8c3;border-radius:var(--radius-sm);padding:14px 16px;font-size:15px;width:100%;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:rgba(184,134,11,0.5)}
+input[type="date"]{color-scheme:light}
 textarea{resize:vertical;line-height:1.5}
-select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238891a5' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7a7a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
 
 /* Animations */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -62,16 +62,16 @@ select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 #ptr-indicator{
   position:absolute;top:-60px;left:50%;transform:translateX(-50%);
   width:40px;height:40px;border-radius:50%;
-  background:var(--bg-2);border:1.5px solid rgba(255,255,255,0.08);
+  background:#faf9f7;border:1.5px solid #cac8c3;
   display:flex;align-items:center;justify-content:center;
   opacity:0;transition:opacity .2s,transform .3s;z-index:100;
-  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
 }
 #ptr-indicator.visible{opacity:1}
 #ptr-indicator.refreshing .ptr-spinner{animation:spin .7s linear infinite}
 #ptr-indicator .ptr-arrow{transition:transform .2s}
 #ptr-indicator.ready .ptr-arrow{transform:rotate(180deg)}
-.ptr-spinner{width:20px;height:20px;border:2.5px solid rgba(96,165,250,0.2);border-top-color:var(--blue);border-radius:50%}
+.ptr-spinner{width:20px;height:20px;border:2.5px solid rgba(184,134,11,0.2);border-top-color:var(--amber);border-radius:50%}
 .ptr-arrow{width:0;height:0}
 #ptr-indicator svg{transition:transform .2s}
 #ptr-indicator.ready svg{transform:rotate(180deg)}
@@ -87,7 +87,7 @@ select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 /* Scrollbar */
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--bg-3);border-radius:4px}
+::-webkit-scrollbar-thumb{background:#c0beb8;border-radius:4px}
 
 html{overscroll-behavior-y:contain}
 @media(min-width:768px){#root{padding:32px 24px 48px}}
@@ -156,7 +156,7 @@ function usePullToRefresh(){
   return{pulling,pullDist,refreshing,threshold};
 }
 
-const BUILD_VERSION="v1.0";
+const BUILD_VERSION="v1.6";
 const BUILD_DATE="Mar 27, 2026";
 
 /* ─── Storage ─── */
@@ -166,17 +166,17 @@ const persist=(k,d)=>{try{localStorage.setItem(k,JSON.stringify(d))}catch{}};
 
 /* ─── Subject Config ─── */
 const SUBJECTS=[
-  {keys:["math","science","inheritance","traits","organisms"],label:"Math & Science",emoji:"🔬",gradient:"linear-gradient(135deg,#064e1e 0%,#0a3a1a 100%)",border:"#1a8a3e",accent:"#34d399",tag:"SCI"},
-  {keys:["spanish","español"],label:"Spanish",emoji:"🇪🇸",gradient:"linear-gradient(135deg,#4a2a0a 0%,#3a1f08 100%)",border:"#8a5a1a",accent:"#fbbf24",tag:"SPA"},
-  {keys:["ela","reading","english","writing","grammar","vocabulary"],label:"ELA / Reading",emoji:"📖",gradient:"linear-gradient(135deg,#0a2a4a 0%,#081e36 100%)",border:"#1a5a8a",accent:"#60a5fa",tag:"ELA"},
-  {keys:["social","history","geography","civics","economy","market","goods"],label:"Social Studies",emoji:"🌍",gradient:"linear-gradient(135deg,#2d0a4a 0%,#1f0836 100%)",border:"#6a1a8a",accent:"#a78bfa",tag:"SOC"},
+  {keys:["math","science","inheritance","traits","organisms"],label:"Math & Science",emoji:"🔬",gradient:"linear-gradient(135deg,#e8ece9 0%,#d5ddd8 100%)",border:"#8fa89a",accent:"#3d6b4f",tag:"SCI"},
+  {keys:["spanish","español"],label:"Spanish",emoji:"🇪🇸",gradient:"linear-gradient(135deg,#f0ebe0 0%,#e5dccb 100%)",border:"#c4a86a",accent:"#8b6914",tag:"SPA"},
+  {keys:["ela","reading","english","writing","grammar","vocabulary"],label:"ELA / Reading",emoji:"📖",gradient:"linear-gradient(135deg,#e6eaf0 0%,#d3dae5 100%)",border:"#8a9bb5",accent:"#4a6185",tag:"ELA"},
+  {keys:["social","history","geography","civics","economy","market","goods"],label:"Social Studies",emoji:"🌍",gradient:"linear-gradient(135deg,#ece8f0 0%,#ddd6e5 100%)",border:"#a08db8",accent:"#5e4d75",tag:"SOC"},
 ];
-const getSub=t=>{const l=(t||"").toLowerCase();for(const s of SUBJECTS)if(s.keys.some(k=>l.includes(k)))return s;return{label:"General",emoji:"📝",gradient:"linear-gradient(135deg,#1a2a3a,#141e2a)",border:"#3a5a7a",accent:"#94a3b8",tag:"GEN"}};
+const getSub=t=>{const l=(t||"").toLowerCase();for(const s of SUBJECTS)if(s.keys.some(k=>l.includes(k)))return s;return{label:"General",emoji:"📝",gradient:"linear-gradient(135deg,#e8e7e3,#dddcd8)",border:"#b0aea8",accent:"#6b6960",tag:"GEN"}};
 
 /* ─── Helpers ─── */
 const daysTo=d=>{if(!d)return null;const t=new Date(d+"T00:00:00"),n=new Date();n.setHours(0,0,0,0);return Math.ceil((t-n)/864e5)};
 const fDate=d=>d?new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}):"TBD";
-const urgC=d=>d===null?"#6b7280":d<=2?"#f87171":d<=5?"#f5a623":"#34d399";
+const urgC=d=>d===null?"#a0a0a0":d<=2?"#a63d3d":d<=5?"#b8860b":"#3d7a4f";
 const shuf=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]]}return b};
 
 const DEFAULTS=[
@@ -198,7 +198,7 @@ const Badge=({days})=>{if(days===null||days<0)return null;const c=urgC(days);ret
 const BackBtn=({onClick,label})=><button onClick={onClick} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 0",marginBottom:16,color:"var(--text-2)",fontSize:14,fontWeight:600}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>{label||"Back"}</button>;
 const Spinner=({size=18,color="var(--blue)"})=><span style={{display:"inline-block",width:size,height:size,border:`2.5px solid ${color}30`,borderTopColor:color,borderRadius:"50%",animation:"spin .7s linear infinite"}}/>;
 
-const Confetti=()=>{const colors=["#f5a623","#34d399","#60a5fa","#f87171","#a78bfa","#fbbf24"];return<div style={{position:"fixed",top:0,left:0,right:0,bottom:0,pointerEvents:"none",zIndex:999,overflow:"hidden"}}>{Array.from({length:40}).map((_,i)=><div key={i} style={{position:"absolute",top:"-10px",left:Math.random()*100+"%",width:8+Math.random()*6,height:8+Math.random()*6,borderRadius:Math.random()>0.5?"50%":"2px",background:colors[i%colors.length],animation:`confetti-fall ${1+Math.random()*1.5}s ease-in ${Math.random()*0.5}s forwards`,opacity:0.9}}/>)}</div>};
+const Confetti=()=>{const colors=["#b8860b","#c4a86a","#3d6b4f","#4a6185","#5e4d75","#d4af37"];return<div style={{position:"fixed",top:0,left:0,right:0,bottom:0,pointerEvents:"none",zIndex:999,overflow:"hidden"}}>{Array.from({length:40}).map((_,i)=><div key={i} style={{position:"absolute",top:"-10px",left:Math.random()*100+"%",width:8+Math.random()*6,height:8+Math.random()*6,borderRadius:Math.random()>0.5?"50%":"2px",background:colors[i%colors.length],animation:`confetti-fall ${1+Math.random()*1.5}s ease-in ${Math.random()*0.5}s forwards`,opacity:0.9}}/>)}</div>};
 
 function App(){
   const[tests,setTests]=useState([]);
@@ -215,6 +215,9 @@ function App(){
   const[qt,setQt]=useState(null);const[qd,setQd]=useState(null);const[qi,setQi]=useState(0);
   const[sc,setSc]=useState(0);const[ans,setAns]=useState(false);const[ua,setUa]=useState(null);
   const[fi,setFi]=useState("");const[ms,setMs]=useState({});const[msub,setMsub]=useState(false);
+  const[wrongPicks,setWrongPicks]=useState([]);const[gotItRight,setGotItRight]=useState(false);
+  const[fillWrong,setFillWrong]=useState(false);
+  const[matchCorrect,setMatchCorrect]=useState({});const[matchWrong,setMatchWrong]=useState({});
   const[showHelp,setShowHelp]=useState(false);
   const[showConfetti,setShowConfetti]=useState(false);
   const[detailTab,setDetailTab]=useState("guide");
@@ -265,7 +268,7 @@ function App(){
   // Quiz
   const startQ=(id,type)=>{
     const t=tests.find(x=>x.id===id);if(!t?.studyGuide||t.studyGuide.length<2)return;
-    setActiveId(id);setQt(type);setQi(0);setSc(0);setAns(false);setUa(null);setFi("");setMs({});setMsub(false);setShowConfetti(false);
+    setActiveId(id);setQt(type);setQi(0);setSc(0);setAns(false);setUa(null);setFi("");setMs({});setMsub(false);setShowConfetti(false);setWrongPicks([]);setGotItRight(false);setFillWrong(false);setMatchCorrect({});setMatchWrong({});
     const sg=t.studyGuide;
     if(type==="mc")setQd(shuf(sg).map(it=>({term:it.term,opts:shuf([{t:it.def,c:true},...shuf(sg.filter(x=>x.term!==it.term)).slice(0,3).map(w=>({t:w.def,c:false}))])})));
     else if(type==="tf"){const qs=[];sg.forEach(it=>{qs.push({term:it.term,shown:it.def,c:true});const w=shuf(sg.filter(x=>x.term!==it.term))[0];if(w)qs.push({term:it.term,shown:w.def,c:false})});setQd(shuf(qs).slice(0,Math.min(10,sg.length*2)))}
@@ -273,10 +276,23 @@ function App(){
     else if(type==="match"){const items=shuf(sg).slice(0,Math.min(5,sg.length));setQd({terms:items.map(i=>i.term),defs:shuf(items.map(i=>i.def)),correct:items})}
     go("quiz")};
 
-  const chkFill=()=>{if(!qd?.[qi])return;const a=fi.trim().toLowerCase(),c=qd[qi].term.toLowerCase();const ok=c.includes(a)||a.includes(c)||(a.length>2&&c.split(" ").some(w=>w.toLowerCase()===a));setAns(true);setUa(ok);if(ok)setSc(s=>s+1)};
-  const nxtQ=()=>{setQi(i=>i+1);setAns(false);setUa(null);setFi("");setTimeout(()=>fiRef.current?.focus(),100)};
-  const chkMatch=()=>{let c=0;qd.correct.forEach(it=>{if(ms[it.term]===it.def)c++});setSc(c);setMsub(true);if(c>=qd.correct.length*0.8)setShowConfetti(true)};
-  const finishQ=()=>{const total=qt==="match"?qd.correct.length:qd.length;if(sc>=total*0.8)setShowConfetti(true);setQi(qt==="match"?0:qd.length)};
+  const chkFill=()=>{if(!qd?.[qi])return;const a=fi.trim().toLowerCase(),c=qd[qi].term.toLowerCase();const ok=c.includes(a)||a.includes(c)||(a.length>2&&c.split(" ").some(w=>w.toLowerCase()===a));if(ok){setAns(true);setGotItRight(true);setFillWrong(false);if(wrongPicks.length===0)setSc(s=>s+1)}else{setFillWrong(true);setWrongPicks(wp=>[...wp,"x"]);setFi("")}};
+  const nxtQ=()=>{setQi(i=>i+1);setAns(false);setUa(null);setFi("");setWrongPicks([]);setGotItRight(false);setFillWrong(false);setTimeout(()=>fiRef.current?.focus(),100)};
+  const lockInMatch=(term,def,wasRevealed)=>{
+    setMatchCorrect(mc=>{const n={...mc,[term]:def};
+      const newCount=Object.keys(n).length;
+      if(qd&&newCount>=qd.terms.length){
+        // Check if high score for confetti
+        const firstTryCount=wasRevealed||matchWrong[term]?sc:sc+1;
+        if(firstTryCount>=qd.terms.length*0.8)setShowConfetti(true);
+        setTimeout(()=>setMsub(true),500);
+      }
+      return n});
+    setMs(s=>({...s,[term]:def}));
+    if(!wasRevealed&&!matchWrong[term]){setSc(s=>s+1)}
+    if(wasRevealed){setMatchWrong(mw=>({...mw,[term]:true}))}
+  };
+  const finishQ=()=>{const total=qt==="match"?qd.correct.length:qd.length;if(sc>=total*0.8)setShowConfetti(true);if(qt==="match"){setMsub(true)}else{setQi(qd.length)}};
 
   const at=tests.find(t=>t.id===activeId);
   const upcoming=tests.filter(t=>{const d=daysTo(t.date);return d===null||d>=0});
@@ -311,12 +327,13 @@ function App(){
       {done&&<div className="pop-in" style={{textAlign:"center",padding:"24px 16px"}}>
         <div style={{fontSize:56,marginBottom:8}}>{sc>=total*0.8?"🌟":sc>=total*0.5?"💪":"📖"}</div>
         <div style={{animation:"count-up .5s ease both",fontSize:40,fontWeight:800,background:`linear-gradient(135deg,${si.accent||"var(--amber)"},var(--purple))`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:4}}>{sc}/{total}</div>
+        <div style={{fontSize:12,color:"var(--text-2)",marginBottom:4,fontWeight:600}}>correct on first try</div>
         <div style={{fontSize:15,color:"var(--text-1)",marginBottom:28,fontWeight:500}}>
           {sc>=total*0.8?"Amazing job, Omar!":sc>=total*0.5?"Great effort! A few more to review.":"Keep practicing — you've got this!"}
         </div>
         <div style={{display:"flex",gap:10,justifyContent:"center"}}>
           <button onClick={()=>{setShowConfetti(false);startQ(activeId,qt)}} style={{padding:"12px 24px",background:si.accent+"18",border:"1.5px solid "+si.accent+"40",borderRadius:12,color:si.accent,fontSize:14,fontWeight:700}}>Try Again</button>
-          <button onClick={()=>{go("home");setQt(null);setShowConfetti(false)}} style={{padding:"12px 24px",background:"var(--bg-2)",border:"1.5px solid var(--border-subtle)",borderRadius:12,color:"var(--text-1)",fontSize:14,fontWeight:700}}>Done</button>
+          <button onClick={()=>{go("home");setQt(null);setShowConfetti(false)}} style={{padding:"12px 24px",background:"var(--bg-2)",border:"1.5px solid rgba(0,0,0,0.08)",borderRadius:12,color:"var(--text-1)",fontSize:14,fontWeight:700}}>Done</button>
         </div>
       </div>}
 
@@ -328,15 +345,24 @@ function App(){
         </div>
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
           {qd[qi].opts.map((o,i)=>{
-            let bg="var(--bg-2)",bdr="rgba(255,255,255,0.06)";
-            if(ans&&o.c){bg="var(--green-dim)";bdr="var(--green-mid)"}
-            else if(ans&&ua===i&&!o.c){bg="var(--red-dim)";bdr="var(--red-mid)"}
-            return<button key={i} onClick={()=>{if(ans)return;setAns(true);setUa(i);if(o.c)setSc(s=>s+1)}} style={{padding:"14px 16px",background:bg,border:"1.5px solid "+bdr,borderRadius:12,color:"var(--text-0)",fontSize:14,textAlign:"left",lineHeight:1.45,fontWeight:500,transition:"all .15s",minHeight:48}}>
-              {ans&&o.c&&<span style={{marginRight:6}}>✅</span>}{ans&&ua===i&&!o.c&&<span style={{marginRight:6}}>❌</span>}{o.t}
+            const isWrong=wrongPicks.includes(i);
+            const isCorrectAndFound=gotItRight&&o.c;
+            let bg="var(--bg-2)",bdr="rgba(0,0,0,0.06)";
+            if(isCorrectAndFound){bg="var(--green-dim)";bdr="var(--green-mid)"}
+            else if(isWrong){bg="var(--red-dim)";bdr="var(--red-mid)"}
+            return<button key={i} disabled={isWrong||gotItRight} onClick={()=>{
+              if(isWrong||gotItRight)return;
+              if(o.c){setGotItRight(true);setAns(true);if(wrongPicks.length===0)setSc(s=>s+1)}
+              else{setWrongPicks(wp=>[...wp,i])}
+            }} style={{padding:"14px 16px",background:bg,border:"1.5px solid "+bdr,borderRadius:12,color:isWrong?"var(--text-3)":"var(--text-0)",fontSize:14,textAlign:"left",lineHeight:1.45,fontWeight:500,transition:"all .15s",minHeight:48,opacity:isWrong?0.6:1}}>
+              {isCorrectAndFound&&<span style={{marginRight:6}}>✅</span>}{isWrong&&<span style={{marginRight:6}}>❌</span>}{o.t}
             </button>})}
         </div>
-        {ans&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",marginTop:16,background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
-        {ans&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",marginTop:16,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
+        {wrongPicks.length>0&&!gotItRight&&<div style={{textAlign:"center",marginTop:10,fontSize:13,color:"var(--amber)",fontWeight:600}}>Not quite — try again!</div>}
+        {gotItRight&&wrongPicks.length===0&&<div style={{textAlign:"center",marginTop:10,fontSize:13,color:"var(--green)",fontWeight:600}}>✅ First try — amazing!</div>}
+        {gotItRight&&wrongPicks.length>0&&<div style={{textAlign:"center",marginTop:10,fontSize:13,color:"var(--green)",fontWeight:600}}>✅ Got it!</div>}
+        {gotItRight&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",marginTop:12,background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
+        {gotItRight&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",marginTop:12,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
       </div>}
 
       {/* ── TF ── */}
@@ -344,19 +370,27 @@ function App(){
         <div style={{background:si.accent+"0d",border:"1.5px solid "+si.accent+"25",borderRadius:18,padding:"22px 20px",marginBottom:12,textAlign:"center"}}>
           <div style={{fontSize:13,color:si.accent,fontWeight:600,marginBottom:8}}>Is this the correct definition of</div>
           <div style={{fontSize:20,fontWeight:800,marginBottom:14}}>{qd[qi].term}?</div>
-          <div style={{fontSize:14,color:"var(--text-1)",lineHeight:1.5,fontStyle:"italic",padding:"12px 16px",background:"rgba(0,0,0,0.15)",borderRadius:10}}>"{qd[qi].shown}"</div>
+          <div style={{fontSize:14,color:"var(--text-1)",lineHeight:1.5,fontStyle:"italic",padding:"12px 16px",background:"rgba(0,0,0,0.05)",borderRadius:10}}>"{qd[qi].shown}"</div>
         </div>
-        {ans&&<div style={{textAlign:"center",padding:8,fontSize:14,fontWeight:600,color:ua===qd[qi].c?"var(--green)":"var(--red)"}}>{ua===qd[qi].c?"✅ Correct!":"❌ Not quite"}</div>}
+        {gotItRight&&wrongPicks.length===0&&<div style={{textAlign:"center",padding:8,fontSize:14,fontWeight:600,color:"var(--green)"}}>✅ First try!</div>}
+        {gotItRight&&wrongPicks.length>0&&<div style={{textAlign:"center",padding:8,fontSize:14,fontWeight:600,color:"var(--green)"}}>✅ Got it!</div>}
+        {wrongPicks.length>0&&!gotItRight&&<div style={{textAlign:"center",padding:8,fontSize:14,fontWeight:600,color:"var(--amber)"}}>Not quite — try the other one!</div>}
         <div style={{display:"flex",gap:10}}>
           {[true,false].map(v=>{
-            let bg="var(--bg-2)",bdr="rgba(255,255,255,0.06)";
-            if(ans&&v===qd[qi].c){bg="var(--green-dim)";bdr="var(--green-mid)"}
-            else if(ans&&ua===v&&v!==qd[qi].c){bg="var(--red-dim)";bdr="var(--red-mid)"}
-            return<button key={""+v} onClick={()=>{if(ans)return;setAns(true);setUa(v);if(v===qd[qi].c)setSc(s=>s+1)}} style={{flex:1,padding:"18px",background:bg,border:"1.5px solid "+bdr,borderRadius:14,color:"var(--text-0)",fontSize:17,fontWeight:700,minHeight:56}}>
+            const isWrong=wrongPicks.includes(v?"t":"f");
+            const isCorrectAndFound=gotItRight&&v===qd[qi].c;
+            let bg="var(--bg-2)",bdr="rgba(0,0,0,0.06)";
+            if(isCorrectAndFound){bg="var(--green-dim)";bdr="var(--green-mid)"}
+            else if(isWrong){bg="var(--red-dim)";bdr="var(--red-mid)"}
+            return<button key={""+v} disabled={isWrong||gotItRight} onClick={()=>{
+              if(isWrong||gotItRight)return;
+              if(v===qd[qi].c){setGotItRight(true);setAns(true);if(wrongPicks.length===0)setSc(s=>s+1)}
+              else{setWrongPicks(wp=>[...wp,v?"t":"f"])}
+            }} style={{flex:1,padding:"18px",background:bg,border:"1.5px solid "+bdr,borderRadius:14,color:isWrong?"var(--text-3)":"var(--text-0)",fontSize:17,fontWeight:700,minHeight:56,opacity:isWrong?0.6:1}}>
               {v?"👍 True":"👎 False"}</button>})}
         </div>
-        {ans&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",marginTop:16,background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
-        {ans&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",marginTop:16,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
+        {gotItRight&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",marginTop:16,background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
+        {gotItRight&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",marginTop:16,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
       </div>}
 
       {/* ── FILL ── */}
@@ -365,25 +399,62 @@ function App(){
           <div style={{fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,color:si.accent,opacity:0.7,marginBottom:8}}>Name this term</div>
           <div style={{fontSize:15,color:"var(--text-0)",lineHeight:1.55,fontWeight:500}}>{qd[qi].def}</div>
         </div>
-        <input ref={fiRef} value={fi} onChange={e=>setFi(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!ans)chkFill()}} placeholder="Type your answer..." disabled={ans} style={{marginBottom:10,opacity:ans?0.5:1,fontSize:16}} autoFocus />
-        {ans&&<div style={{padding:"12px 16px",marginBottom:10,borderRadius:10,background:ua?"var(--green-dim)":"var(--red-dim)",border:"1.5px solid "+(ua?"var(--green-mid)":"var(--red-mid)"),fontSize:14,fontWeight:600}}>{ua?"✅ Correct!":
-          <span>❌ Answer: <strong style={{color:"var(--text-0)"}}>{qd[qi].term}</strong></span>}</div>}
-        {!ans&&<button onClick={chkFill} disabled={!fi.trim()} style={{width:"100%",padding:"14px",background:fi.trim()?si.accent+"18":"var(--bg-2)",border:"1.5px solid "+(fi.trim()?si.accent+"35":"rgba(255,255,255,0.06)"),borderRadius:12,color:fi.trim()?si.accent:"var(--text-3)",fontSize:15,fontWeight:700}}>Check</button>}
-        {ans&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
-        {ans&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
+        {fillWrong&&!gotItRight&&<div style={{padding:"10px 14px",marginBottom:10,borderRadius:10,background:"var(--red-dim)",border:"1.5px solid var(--red-mid)",fontSize:13,fontWeight:600,color:"var(--red)"}}>❌ Not quite — try again! <span style={{color:"var(--text-3)",fontWeight:500,fontSize:12}}>Hint: starts with "{qd[qi].term[0].toUpperCase()}"</span></div>}
+        {gotItRight&&<div style={{padding:"10px 14px",marginBottom:10,borderRadius:10,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",fontSize:13,fontWeight:600,color:"var(--green)"}}>✅ {wrongPicks.length===0?"First try — amazing!":"Got it!"} The answer is: <strong style={{color:"var(--text-0)"}}>{qd[qi].term}</strong></div>}
+        {!gotItRight&&<>
+          <input ref={fiRef} value={fi} onChange={e=>setFi(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&fi.trim())chkFill()}} placeholder="Type your answer..." style={{marginBottom:10,fontSize:16}} autoFocus />
+          <button onClick={chkFill} disabled={!fi.trim()} style={{width:"100%",padding:"14px",background:fi.trim()?si.accent+"18":"var(--bg-2)",border:"1.5px solid "+(fi.trim()?si.accent+"35":"rgba(0,0,0,0.06)"),borderRadius:12,color:fi.trim()?si.accent:"var(--text-3)",fontSize:15,fontWeight:700}}>Check</button>
+          {wrongPicks.length>=2&&<button onClick={()=>{setGotItRight(true);setAns(true)}} style={{width:"100%",padding:"10px",marginTop:8,background:"transparent",border:"none",color:"var(--text-3)",fontSize:12,fontWeight:600,textDecoration:"underline"}}>Show answer</button>}
+        </>}
+        {gotItRight&&qi<total-1&&<button onClick={nxtQ} style={{width:"100%",padding:"14px",marginTop:4,background:si.accent+"18",border:"1.5px solid "+si.accent+"35",borderRadius:12,color:si.accent,fontSize:15,fontWeight:700}}>Next →</button>}
+        {gotItRight&&qi===total-1&&<button onClick={finishQ} style={{width:"100%",padding:"14px",marginTop:4,background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:12,color:"var(--green)",fontSize:15,fontWeight:700}}>See Results</button>}
       </div>}
 
       {/* ── MATCH ── */}
-      {qt==="match"&&!msub&&<div className="fade-up">
-        <div style={{fontSize:13,color:"var(--text-2)",marginBottom:16,fontWeight:500}}>Match each term with its definition.</div>
-        {qd.terms.map((term,i)=>{const matched=ms[term];return<div key={i} style={{marginBottom:14}}>
-          <div style={{fontSize:15,fontWeight:700,color:si.accent,marginBottom:6}}>{term}</div>
-          <select value={matched||""} onChange={e=>setMs(s=>({...s,[term]:e.target.value}))} style={{fontSize:14}}>
-            <option value="">Choose...</option>
-            {qd.defs.map((d,j)=><option key={j} value={d}>{d.length>55?d.slice(0,52)+"...":d}</option>)}
-          </select>
-        </div>})}
-        <button onClick={chkMatch} disabled={Object.keys(ms).length<qd.terms.length} style={{width:"100%",padding:"14px",marginTop:8,background:Object.keys(ms).length>=qd.terms.length?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+(Object.keys(ms).length>=qd.terms.length?"var(--green-mid)":"rgba(255,255,255,0.06)"),borderRadius:12,color:Object.keys(ms).length>=qd.terms.length?"var(--green)":"var(--text-3)",fontSize:15,fontWeight:700}}>Check</button>
+      {qt==="match"&&!done&&<div className="fade-up">
+        <div style={{fontSize:13,color:"var(--text-2)",marginBottom:16,fontWeight:500}}>Match each term — you'll know right away!</div>
+        {qd.terms.map((term,i)=>{
+          const isLocked=matchCorrect[term];
+          const isWrongFlash=matchWrong[term];
+          const correctDef=qd.correct.find(c=>c.term===term)?.def;
+
+          const handleSelect=(val)=>{
+            if(!val||isLocked)return;
+            if(val===correctDef){
+              lockInMatch(term,val,false);
+            }else{
+              setMatchWrong(mw=>({...mw,[term]:true}));
+              setMs(s=>({...s,[term]:""}));
+            }
+          };
+
+          const showAnswer=()=>{
+            lockInMatch(term,correctDef,true);
+          };
+
+          return<div key={i} style={{marginBottom:14,transition:"all .2s"}}>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+              {isLocked&&!isWrongFlash&&<span style={{fontSize:16}}>✅</span>}
+              {isLocked&&isWrongFlash&&<span style={{fontSize:16}}>💡</span>}
+              {isWrongFlash&&!isLocked&&<span style={{fontSize:16}}>❌</span>}
+              <span style={{fontSize:15,fontWeight:700,color:isLocked?"var(--green)":isWrongFlash?"var(--red)":si.accent}}>{term}</span>
+            </div>
+            {isLocked?
+              <div style={{padding:"12px 14px",background:isWrongFlash?"var(--amber-dim)":"var(--green-dim)",border:"1.5px solid "+(isWrongFlash?"var(--amber-mid)":"var(--green-mid)"),borderRadius:10,fontSize:13,color:"var(--text-1)",fontWeight:500}}>{matchCorrect[term]}</div>
+            :<>
+              <select value={ms[term]||""} onChange={e=>handleSelect(e.target.value)} style={{fontSize:14,borderColor:isWrongFlash?"var(--red-mid)":"rgba(0,0,0,0.08)"}}>
+                <option value="">{isWrongFlash?"Try again or show answer...":"Choose..."}</option>
+                {qd.defs.filter(d=>!Object.values(matchCorrect).includes(d)).map((d,j)=><option key={j} value={d}>{d.length>55?d.slice(0,52)+"...":d}</option>)}
+              </select>
+              {isWrongFlash&&<button onClick={showAnswer} style={{marginTop:6,padding:"8px 14px",background:"var(--amber-dim)",border:"1.5px solid var(--amber-mid)",borderRadius:8,color:"var(--amber)",fontSize:12,fontWeight:700,width:"100%"}}>💡 Show correct answer</button>}
+            </>
+            }
+          </div>})}
+        {Object.keys(matchCorrect).length>0&&Object.keys(matchCorrect).length<qd.terms.length&&
+          <div style={{textAlign:"center",marginTop:8,fontSize:12,color:"var(--text-3)",fontWeight:600}}>
+            {Object.keys(matchCorrect).length} of {qd.terms.length} matched
+          </div>
+        }
       </div>}
     </div>
   }
@@ -404,7 +475,7 @@ function App(){
           <textarea value={ed} onChange={e=>setEd(e.target.value)} placeholder="Definition" rows={2} />
           <div style={{display:"flex",gap:8,marginTop:10}}>
             <button onClick={()=>updG(i)} style={{padding:"8px 18px",background:"var(--green-dim)",border:"1.5px solid var(--green-mid)",borderRadius:8,color:"var(--green)",fontSize:13,fontWeight:700}}>Save</button>
-            <button onClick={()=>setEi(null)} style={{padding:"8px 18px",background:"var(--bg-2)",border:"1.5px solid rgba(255,255,255,0.08)",borderRadius:8,color:"var(--text-2)",fontSize:13,fontWeight:600}}>Cancel</button>
+            <button onClick={()=>setEi(null)} style={{padding:"8px 18px",background:"var(--bg-2)",border:"1.5px solid rgba(0,0,0,0.08)",borderRadius:8,color:"var(--text-2)",fontSize:13,fontWeight:600}}>Cancel</button>
           </div>
         </div>;
         return<div key={i} style={{background:"var(--bg-2)",borderRadius:12,padding:"12px 14px",marginBottom:6,display:"flex",alignItems:"flex-start",gap:10}}>
@@ -422,7 +493,7 @@ function App(){
         <div style={{fontSize:13,fontWeight:700,color:"var(--green)",marginBottom:10}}>+ New Term</div>
         <input value={nt} onChange={e=>setNt(e.target.value)} placeholder="Term" style={{marginBottom:8}} />
         <textarea value={nd} onChange={e=>setNd(e.target.value)} placeholder="Definition" rows={2} />
-        <button onClick={addG} disabled={!nt.trim()||!nd.trim()} style={{marginTop:10,padding:"10px 22px",background:(nt.trim()&&nd.trim())?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+((nt.trim()&&nd.trim())?"var(--green-mid)":"rgba(255,255,255,0.06)"),borderRadius:10,color:(nt.trim()&&nd.trim())?"var(--green)":"var(--text-3)",fontSize:14,fontWeight:700}}>Add</button>
+        <button onClick={addG} disabled={!nt.trim()||!nd.trim()} style={{marginTop:10,padding:"10px 22px",background:(nt.trim()&&nd.trim())?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+((nt.trim()&&nd.trim())?"var(--green-mid)":"rgba(0,0,0,0.06)"),borderRadius:10,color:(nt.trim()&&nd.trim())?"var(--green)":"var(--text-3)",fontSize:14,fontWeight:700}}>Add</button>
       </div>
     </div>
   }
@@ -437,7 +508,7 @@ function App(){
         <Pill color={si.accent} style={{marginBottom:10}}>{si.tag}</Pill>
         <div style={{fontSize:20,fontWeight:800,marginBottom:4,maxWidth:"70%"}}>{at.topic}</div>
         <div style={{fontSize:13,color:"var(--text-2)",fontWeight:500}}>{si.emoji} {si.label} · {fDate(at.date)}</div>
-        {at.notes&&<div style={{fontSize:13,color:"var(--text-1)",marginTop:12,lineHeight:1.5,padding:"10px 12px",background:"rgba(0,0,0,0.2)",borderRadius:10}}>📌 {at.notes}</div>}
+        {at.notes&&<div style={{fontSize:13,color:"var(--text-1)",marginTop:12,lineHeight:1.5,padding:"10px 12px",background:"rgba(0,0,0,0.05)",borderRadius:10}}>📌 {at.notes}</div>}
       </div>
 
       {/* Tabs */}
@@ -493,7 +564,7 @@ function App(){
         <input type="date" value={form.date} onChange={e=>setForm(p=>({...p,date:e.target.value}))}/></div>
       <div><label style={{fontSize:12,color:"var(--text-2)",fontWeight:700,display:"block",marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>Notes</label>
         <textarea value={form.notes} onChange={e=>setForm(p=>({...p,notes:e.target.value}))} placeholder="What to review..." rows={3}/></div>
-      <button onClick={addTest} disabled={!form.topic.trim()} style={{padding:"16px",marginTop:4,background:form.topic.trim()?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+(form.topic.trim()?"var(--green-mid)":"rgba(255,255,255,0.06)"),borderRadius:14,color:form.topic.trim()?"var(--green)":"var(--text-3)",fontSize:16,fontWeight:700}}>Add Test</button>
+      <button onClick={addTest} disabled={!form.topic.trim()} style={{padding:"16px",marginTop:4,background:form.topic.trim()?"var(--green-dim)":"var(--bg-2)",border:"1.5px solid "+(form.topic.trim()?"var(--green-mid)":"rgba(0,0,0,0.06)"),borderRadius:14,color:form.topic.trim()?"var(--green)":"var(--text-3)",fontSize:16,fontWeight:700}}>Add Test</button>
     </div>
   </div>;
 
@@ -503,7 +574,7 @@ function App(){
     <h2 style={{fontSize:20,fontWeight:800,marginBottom:8}}>Extract from Email</h2>
     <p style={{fontSize:13,color:"var(--text-2)",marginBottom:16,lineHeight:1.5}}>Paste a teacher email or study guide. AI will pull out tests and vocab.</p>
     <textarea value={email} onChange={e=>setEmail(e.target.value)} placeholder="Paste content here..." rows={8} style={{border:"1.5px solid var(--purple-mid)",lineHeight:1.6}}/>
-    <button onClick={extract} disabled={extracting||email.trim().length<20} style={{width:"100%",padding:"16px",marginTop:12,background:email.trim().length>=20?"var(--purple-dim)":"var(--bg-2)",border:"1.5px solid "+(email.trim().length>=20?"var(--purple-mid)":"rgba(255,255,255,0.06)"),borderRadius:14,color:email.trim().length>=20?"var(--purple)":"var(--text-3)",fontSize:16,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+    <button onClick={extract} disabled={extracting||email.trim().length<20} style={{width:"100%",padding:"16px",marginTop:12,background:email.trim().length>=20?"var(--purple-dim)":"var(--bg-2)",border:"1.5px solid "+(email.trim().length>=20?"var(--purple-mid)":"rgba(0,0,0,0.06)"),borderRadius:14,color:email.trim().length>=20?"var(--purple)":"var(--text-3)",fontSize:16,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
       {extracting?<><Spinner color="var(--purple)"/> Extracting...</>:"Extract Tests"}
     </button>
   </div>;
@@ -513,7 +584,7 @@ function App(){
     {/* Header */}
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
       <div style={{display:"flex",alignItems:"center",gap:14}}>
-        <div style={{width:50,height:50,borderRadius:16,background:"linear-gradient(135deg,#f5a623,#e08a10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,fontWeight:800,color:"#fff",boxShadow:"0 4px 20px rgba(245,166,35,0.35)",letterSpacing:"-1px"}}>O</div>
+        <div style={{width:50,height:50,borderRadius:16,background:"linear-gradient(135deg,#d4af37,#b8860b)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,fontWeight:800,color:"#fff",boxShadow:"0 2px 10px rgba(184,134,11,0.25)",letterSpacing:"-1px"}}>O</div>
         <div>
           <h1 style={{fontSize:20,fontWeight:800,letterSpacing:"-0.3px",lineHeight:1.2}}>Omar's Learning Center</h1>
           <p style={{fontSize:12,color:"var(--text-2)",fontWeight:600,marginTop:1}}>3rd Grade · Cedar Hill Prep</p>
@@ -582,7 +653,7 @@ function App(){
       </div>
       {plan.map((day,di)=><div key={di} style={{background:"var(--bg-2)",borderRadius:14,padding:14,marginBottom:8}}>
         <div style={{fontSize:13,fontWeight:700,color:"var(--blue)",marginBottom:8}}>{day.dayLabel||fDate(day.day)}</div>
-        {(day.tasks||[]).map((task,ti)=>{const tsi=getSub(task.subject);return<div key={ti} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderTop:ti?"1px solid rgba(255,255,255,0.04)":"none"}}>
+        {(day.tasks||[]).map((task,ti)=>{const tsi=getSub(task.subject);return<div key={ti} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderTop:ti?"1px solid rgba(0,0,0,0.04)":"none"}}>
           <span style={{fontSize:16,width:28,textAlign:"center"}}>{tsi.emoji}</span>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:600}}>{task.activity}</div>
@@ -617,7 +688,7 @@ function PullWrapper({children}){
     <div id="ptr-indicator" className={(pulling||refreshing?"visible":"")+(refreshing?" refreshing":"")+(ready&&!refreshing?" ready":"")} style={{transform:`translateX(-50%) translateY(${pulling?0:-20}px)`,opacity:pulling||refreshing?Math.min(pullDist/30,1):0}}>
       {refreshing
         ?<div className="ptr-spinner"/>
-        :<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2.5" strokeLinecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        :<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="2.5" strokeLinecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       }
     </div>
     {children}
