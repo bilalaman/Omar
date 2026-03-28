@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Omar's Learning Center</title>
+  <!-- Icons & PWA -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMGExNjI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBmMjA0NCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmY2QzNGQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZDk3NzA2Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCByZWN0IC0tPgogIDxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iOTYiIHJ5PSI5NiIgZmlsbD0idXJsKCNiZykiLz4KICA8IS0tIEdvbGQgYm9yZGVyIC0tPgogIDxyZWN0IHg9IjE4IiB5PSIxOCIgd2lkdGg9IjQ3NiIgaGVpZ2h0PSI0NzYiIHJ4PSI4MCIgcnk9IjgwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZCkiIHN0cm9rZS13aWR0aD0iMTQiLz4KICA8IS0tIE9NQVIgdGV4dCAtLT4KICA8dGV4dCB4PSIyNTYiIHk9IjMyMCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE4OCIgZm9udC13ZWlnaHQ9IjcwMCIgbGV0dGVyLXNwYWNpbmc9IjgiCiAgICB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ1cmwoI2dvbGQpIj5PTUFSPC90ZXh0PgogIDwhLS0gVGhpbiBnb2xkIHVuZGVybGluZSBhY2NlbnQgLS0+CiAgPHJlY3QgeD0iOTYiIHk9IjM1OCIgd2lkdGg9IjMyMCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0idXJsKCNnb2xkKSIgb3BhY2l0eT0iMC42Ii8+Cjwvc3ZnPg==">
+  <link rel="apple-touch-icon" id="ati" href="">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Omar">
+  <meta name="theme-color" content="#0a1628">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
   <style>
@@ -1204,6 +1211,55 @@ const SEED_TESTS = [
     ]
   }
 ];
+
+// ──────────────────────────────────────────────
+// GENERATE APPLE TOUCH ICON (PNG via Canvas)
+// ──────────────────────────────────────────────
+(function generateATI(){
+  try {
+    const SIZE = 512;
+    const c = document.createElement('canvas');
+    c.width = c.height = SIZE;
+    const ctx = c.getContext('2d');
+
+    // Background rounded rect
+    const R = 96;
+    ctx.beginPath();
+    ctx.moveTo(R,0); ctx.lineTo(SIZE-R,0);
+    ctx.quadraticCurveTo(SIZE,0,SIZE,R);
+    ctx.lineTo(SIZE,SIZE-R);
+    ctx.quadraticCurveTo(SIZE,SIZE,SIZE-R,SIZE);
+    ctx.lineTo(R,SIZE); ctx.quadraticCurveTo(0,SIZE,0,SIZE-R);
+    ctx.lineTo(0,R); ctx.quadraticCurveTo(0,0,R,0);
+    ctx.closePath();
+
+    // Navy gradient fill
+    const bg = ctx.createLinearGradient(0,0,SIZE,SIZE);
+    bg.addColorStop(0,'#0a1628'); bg.addColorStop(1,'#0f2044');
+    ctx.fillStyle = bg; ctx.fill();
+
+    // Gold border
+    const gb = ctx.createLinearGradient(0,0,SIZE,SIZE);
+    gb.addColorStop(0,'#fcd34d'); gb.addColorStop(1,'#d97706');
+    ctx.strokeStyle = gb; ctx.lineWidth = 14; ctx.stroke();
+
+    // OMAR text
+    const gt = ctx.createLinearGradient(80,0,432,0);
+    gt.addColorStop(0,'#fcd34d'); gt.addColorStop(1,'#d97706');
+    ctx.fillStyle = gt;
+    ctx.font = '700 188px Georgia,serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText('OMAR', SIZE/2, 318);
+
+    // Gold underline
+    ctx.fillStyle = 'rgba(251,191,36,0.6)';
+    ctx.beginPath(); ctx.roundRect(96,358,320,6,3); ctx.fill();
+
+    const png = c.toDataURL('image/png');
+    document.getElementById('ati').setAttribute('href', png);
+  } catch(e){ /* canvas not available */ }
+})();
 
 async function init(){
   await loadTests();
