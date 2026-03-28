@@ -395,6 +395,46 @@
     .hidden{display:none!important}
     .loading{text-align:center;padding:60px;color:var(--muted)}
     .cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+    /* ─── PULL TO REFRESH ─── */
+    #ptr{
+      position:fixed;top:62px;left:0;right:0;z-index:150;
+      display:flex;align-items:center;justify-content:center;
+      height:0;overflow:hidden;
+      background:linear-gradient(180deg,rgba(251,191,36,.08) 0%,transparent 100%);
+      transition:height .22s ease;
+      pointer-events:none;
+    }
+    #ptr.pulling{height:56px}
+    #ptr.refreshing{height:56px}
+    .ptr-inner{display:flex;align-items:center;gap:10px;color:var(--gold-400);font-size:13px;font-weight:600}
+    .ptr-arrow{
+      width:28px;height:28px;border-radius:50%;
+      background:rgba(251,191,36,.12);border:1.5px solid rgba(251,191,36,.3);
+      display:flex;align-items:center;justify-content:center;
+      transition:transform .22s ease;
+    }
+    #ptr.ready .ptr-arrow{transform:rotate(180deg)}
+    .ptr-spinner{
+      width:18px;height:18px;
+      border:2.5px solid rgba(251,191,36,.25);
+      border-top-color:var(--gold-400);
+      border-radius:50%;
+      animation:spin .65s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ─── FOOTER ─── */
+    .ftr{
+      margin-top:60px;
+      border-top:1px solid var(--border);
+      padding:18px 24px;
+      text-align:center;
+      font-size:11.5px;
+      color:var(--slate-600);
+      letter-spacing:.04em;
+    }
+    .ftr strong{color:var(--slate-400);font-weight:600}
   </style>
 </head>
 <body>
@@ -410,8 +450,10 @@
   </div>
 </div>
 
+<div id="ptr"><div class="ptr-inner"><div class="ptr-arrow" id="ptr-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div><span id="ptr-label">Pull down to refresh</span></div></div>
 <div class="main" id="app"><div class="loading">Loading…</div></div>
 <div class="toast" id="toast"></div>
+<div class="ftr" id="ftr"></div>
 
 <script>
 // ──────────────────────────────────────────────
@@ -1162,8 +1204,72 @@ async function init(){
     await saveTests();
   }
   nav('home');
+  initPTR();
+  stampFooter();
 }
 init();
+
+// ──────────────────────────────────────────────
+// FOOTER VERSION STAMP
+// ──────────────────────────────────────────────
+function stampFooter(){
+  const now = new Date();
+  const opts = {month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'};
+  const stamp = now.toLocaleString('en-US', opts);
+  document.getElementById('ftr').innerHTML =
+    `<strong>Omar's Learning Center</strong> &nbsp;·&nbsp; v1.3 &nbsp;·&nbsp; Loaded ${stamp}`;
+}
+
+// ──────────────────────────────────────────────
+// PULL-TO-REFRESH
+// ──────────────────────────────────────────────
+function initPTR(){
+  let startY=0, curY=0, pulling=false, triggered=false;
+  const ptr=document.getElementById('ptr');
+  const arrow=document.getElementById('ptr-arrow');
+  const label=document.getElementById('ptr-label');
+  const THRESHOLD=80;
+
+  document.addEventListener('touchstart',e=>{
+    if(window.scrollY>0) return;
+    startY=e.touches[0].clientY;
+    pulling=true; triggered=false;
+  },{passive:true});
+
+  document.addEventListener('touchmove',e=>{
+    if(!pulling) return;
+    curY=e.touches[0].clientY;
+    const dist=Math.min(curY-startY,THRESHOLD*1.4);
+    if(dist<=0){ ptr.className=''; return; }
+    ptr.classList.add('pulling');
+    if(dist>=THRESHOLD){
+      ptr.classList.add('ready');
+      label.textContent='Release to refresh!';
+    } else {
+      ptr.classList.remove('ready');
+      label.textContent='Pull down to refresh';
+    }
+  },{passive:true});
+
+  document.addEventListener('touchend',async ()=>{
+    if(!pulling) return;
+    pulling=false;
+    const dist=curY-startY;
+    if(dist>=THRESHOLD && !triggered){
+      triggered=true;
+      ptr.className='refreshing';
+      label.textContent='Refreshing…';
+      arrow.innerHTML='<div class="ptr-spinner"></div>';
+      await loadTests();
+      nav(S.view);
+      stampFooter();
+      setTimeout(()=>{ ptr.className=''; arrow.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'; label.textContent='Pull down to refresh'; },400);
+    } else {
+      ptr.className='';
+    }
+    curY=0;
+  },{passive:true});
+}
 </script>
 </body>
 </html>
