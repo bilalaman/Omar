@@ -508,8 +508,14 @@ const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 // STORAGE
 // ──────────────────────────────────────────────
 async function loadTests(){
-  try{ const r = await window.storage.get('lc2:tests'); S.tests = JSON.parse(r.value); }
-  catch(e){ S.tests = []; }
+  try{
+    const r = await window.storage.get('lc2:tests');
+    const parsed = JSON.parse(r.value);
+    if(Array.isArray(parsed)) S.tests = parsed;
+  } catch(e){
+    // Don't wipe existing tests on storage error — keep whatever is in memory
+    if(!S.tests) S.tests = [];
+  }
 }
 async function saveTests(){
   try{ await window.storage.set('lc2:tests', JSON.stringify(S.tests)); }
@@ -1290,6 +1296,7 @@ function initPTR(){
       label.textContent='Refreshing…';
       arrow.innerHTML='<div class="ptr-spinner"></div>';
       await loadTests();
+      if(S.tests.length === 0){ S.tests = SEED_TESTS; await saveTests(); }
       nav(S.view);
       stampFooter();
       setTimeout(()=>{ ptr.className=''; arrow.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'; label.textContent='Pull down to refresh'; },400);
