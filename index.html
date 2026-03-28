@@ -52,10 +52,19 @@
     }
     .brand{display:flex;align-items:center;gap:10px;cursor:pointer}
     .brand-icon{
-      width:34px;height:34px;border-radius:7px;
-      background:linear-gradient(135deg,var(--gold-600),var(--gold-400));
+      height:36px;padding:0 10px;border-radius:7px;
+      background:linear-gradient(135deg,#0a1628 0%,#0f2044 100%);
+      border:1.5px solid var(--gold-600);
       display:flex;align-items:center;justify-content:center;
-      font-size:17px;flex-shrink:0;
+      flex-shrink:0;
+      box-shadow:0 2px 8px rgba(0,0,0,.4), inset 0 1px 0 rgba(251,191,36,.15);
+    }
+    .brand-icon-text{
+      font-family:'Playfair Display',serif;
+      font-size:14px;font-weight:700;letter-spacing:.18em;
+      background:linear-gradient(135deg,var(--gold-300),var(--gold-500));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
     }
     .brand-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700}
     .brand-name em{color:var(--gold-400);font-style:normal}
@@ -441,7 +450,7 @@
 
 <div class="hdr">
   <div class="brand" onclick="nav('home')">
-    <div class="brand-icon">📚</div>
+    <div class="brand-icon"><span class="brand-icon-text">OMAR</span></div>
     <div class="brand-name">Omar's <em>Learning Center</em></div>
   </div>
   <div class="nav">
