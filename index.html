@@ -290,8 +290,8 @@
     .fill-area{display:flex;flex-direction:column;gap:12px}
     .fill-area input{font-size:16px;padding:14px 16px}
     .fill-feedback{
-      padding:13px 16px;border-radius:var(--r-sm);font-size:14px;
-      border:1px solid;
+      padding:16px 18px;border-radius:var(--r-sm);font-size:16px;font-weight:600;
+      border:1px solid;display:flex;align-items:center;gap:10px;
     }
     .fill-feedback.ok{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.3)}
     .fill-feedback.no{background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.3)}
@@ -841,22 +841,37 @@ function ansMC(idx, selId, corrId){
   document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
   const ok=selId===corrId;
   if(ok) S.score++;
-  document.getElementById('op'+idx).classList.add(ok?'correct':'wrong');
+  const selBtn=document.getElementById('op'+idx);
+  selBtn.classList.add(ok?'correct':'wrong');
+  const selLtr=selBtn.querySelector('.opt-ltr');
+  selLtr.innerHTML=ok?'<span style="font-size:18px">✓</span>':'<span style="font-size:18px">✗</span>';
   if(!ok){
-    S.qs[S.qi].opts.forEach((o,i)=>{ if(o.id===corrId) document.getElementById('op'+i).classList.add('correct'); });
+    S.qs[S.qi].opts.forEach((o,i)=>{
+      if(o.id===corrId){
+        const cb=document.getElementById('op'+i);
+        cb.classList.add('correct');
+        cb.querySelector('.opt-ltr').innerHTML='<span style="font-size:18px">✓</span>';
+      }
+    });
   }
   S.answers.push({ok, term:S.qs[S.qi].term});
-  setTimeout(nextQ, 1100);
+  setTimeout(nextQ, 1300);
 }
 
 function ansTF(sel, isOk){
   document.querySelectorAll('.tf-btn').forEach(b=>b.disabled=true);
   const ok=sel===isOk;
   if(ok) S.score++;
-  document.getElementById(sel?'tf-t':'tf-f').classList.add(ok?'correct':'wrong');
-  if(!ok) document.getElementById(isOk?'tf-t':'tf-f').classList.add('correct');
+  const picked=document.getElementById(sel?'tf-t':'tf-f');
+  picked.classList.add(ok?'correct':'wrong');
+  picked.innerHTML=(ok?'<div style="font-size:36px">✓</div><div>':'<div style="font-size:36px">✗</div><div>')+picked.textContent+'</div>';
+  if(!ok){
+    const corrBtn=document.getElementById(isOk?'tf-t':'tf-f');
+    corrBtn.classList.add('correct');
+    corrBtn.innerHTML='<div style="font-size:36px">✓</div><div>'+corrBtn.textContent+'</div>';
+  }
   S.answers.push({ok, term:S.qs[S.qi].term});
-  setTimeout(nextQ, 1100);
+  setTimeout(nextQ, 1300);
 }
 
 function ansFill(termId, correctDef){
@@ -868,7 +883,7 @@ function ansFill(termId, correctDef){
   if(inp) inp.disabled=true;
   const fb=document.createElement('div');
   fb.className='fill-feedback '+(ok?'ok':'no');
-  fb.textContent=ok?'✅ Correct!':`❌ Answer: ${correctDef}`;
+  fb.innerHTML=ok?'<span style="font-size:22px">✓</span> Correct!':`<span style="font-size:22px">✗</span> The answer is: <strong>${correctDef}</strong>`;
   document.getElementById('fill-area')?.appendChild(fb);
   setTimeout(nextQ, 1600);
 }
