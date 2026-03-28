@@ -293,6 +293,25 @@
       padding:16px 18px;border-radius:var(--r-sm);font-size:16px;font-weight:600;
       border:1px solid;display:flex;align-items:center;gap:10px;
     }
+    .q-feedback{
+      margin-top:20px;padding:18px 20px;border-radius:var(--r);
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      border:2px solid;
+    }
+    .q-feedback.ok{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.35);color:var(--green)}
+    .q-feedback.no{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.35);color:var(--red)}
+    .q-feedback-left{display:flex;align-items:center;gap:12px}
+    .q-feedback-ico{font-size:36px;line-height:1}
+    .q-feedback-word{font-family:'Playfair Display',serif;font-size:22px;font-weight:700}
+    .q-feedback-msg{font-size:13.5px;margin-top:3px;opacity:.85}
+    .btn-next{
+      padding:12px 24px;border-radius:var(--r-sm);border:none;
+      background:var(--gold-500);color:var(--slate-900);
+      font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;
+      cursor:pointer;white-space:nowrap;flex-shrink:0;
+      transition:background .15s,transform .15s;
+    }
+    .btn-next:hover{background:var(--gold-400);transform:translateY(-1px)}
     .fill-feedback.ok{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.3)}
     .fill-feedback.no{background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.3)}
 
@@ -855,7 +874,7 @@ function ansMC(idx, selId, corrId){
     });
   }
   S.answers.push({ok, term:S.qs[S.qi].term});
-  setTimeout(nextQ, 1300);
+  showFeedback(ok, S.qs[S.qi]);
 }
 
 function ansTF(sel, isOk){
@@ -871,7 +890,7 @@ function ansTF(sel, isOk){
     corrBtn.innerHTML='<div style="font-size:36px">✓</div><div>'+corrBtn.textContent+'</div>';
   }
   S.answers.push({ok, term:S.qs[S.qi].term});
-  setTimeout(nextQ, 1300);
+  showFeedback(ok, S.qs[S.qi]);
 }
 
 function ansFill(termId, correctDef){
@@ -881,11 +900,32 @@ function ansFill(termId, correctDef){
   if(ok) S.score++;
   S.answers.push({ok, term:S.qs[S.qi].term});
   if(inp) inp.disabled=true;
+  const checkBtn=document.querySelector('#fill-area .btn');
+  if(checkBtn) checkBtn.style.display='none';
+  showFeedback(ok, S.qs[S.qi]);
+}
+
+function showFeedback(ok, q){
+  const wrap=document.querySelector('.quiz-wrap');
+  if(!wrap) return;
+  const isLast=(S.qi+1>=S.qs.length);
+  const nextLabel=isLast?'See My Results →':'Next Question →';
+  const wrongMsg=S.mode==='tf'
+    ? `The correct answer was <strong>${q.tfOk?'True':'False'}</strong>`
+    : `The correct answer was: <strong>${q.definition}</strong>`;
   const fb=document.createElement('div');
-  fb.className='fill-feedback '+(ok?'ok':'no');
-  fb.innerHTML=ok?'<span style="font-size:22px">✓</span> Correct!':`<span style="font-size:22px">✗</span> The answer is: <strong>${correctDef}</strong>`;
-  document.getElementById('fill-area')?.appendChild(fb);
-  setTimeout(nextQ, 1600);
+  fb.className='q-feedback '+(ok?'ok':'no');
+  fb.innerHTML=`
+    <div class="q-feedback-left">
+      <div class="q-feedback-ico">${ok?'✓':'✗'}</div>
+      <div>
+        <div class="q-feedback-word">${ok?'Correct!':'Wrong!'}</div>
+        ${!ok?`<div class="q-feedback-msg">${wrongMsg}</div>`:''}
+      </div>
+    </div>
+    <button class="btn-next" onclick="nextQ()">${nextLabel}</button>`;
+  wrap.appendChild(fb);
+  fb.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function nextQ(){
