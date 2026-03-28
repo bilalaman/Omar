@@ -968,14 +968,14 @@ function rMatch(t){
           const m=S.mPairs.includes(it.id);
           const sel=S.mSel===it.id;
           return `<div class="match-item ${m?'matched':sel?'sel':''}" id="ml-${it.id}"
-            onclick="${m?'':'selMatch(\"left\",\"'+it.id+'\")'}">${x(it.text)}</div>`;
+            onclick="${m?'':'selMatch(\'left\',\''+it.id+'\')' }">${x(it.text)}</div>`;
         }).join('')}
       </div>
       <div class="match-col">
         ${S.mRight.map(it=>{
           const m=S.mPairs.includes(it.id);
           return `<div class="match-item ${m?'matched':''}" id="mr-${it.id}"
-            onclick="${m?'':'selMatch(\"right\",\"'+it.id+'\")'}">${x(it.text)}</div>`;
+            onclick="${m?'':'selMatch(\'right\',\''+it.id+'\')' }">${x(it.text)}</div>`;
         }).join('')}
       </div>
     </div>
