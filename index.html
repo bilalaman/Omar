@@ -509,7 +509,7 @@ const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 // ──────────────────────────────────────────────
 async function loadTests(){
   try{
-    const r = await window.storage.get('lc2:tests');
+    const r = await window.storage.get('lc2:tests:v3');
     const parsed = JSON.parse(r.value);
     if(Array.isArray(parsed)) S.tests = parsed;
   } catch(e){
@@ -518,7 +518,7 @@ async function loadTests(){
   }
 }
 async function saveTests(){
-  try{ await window.storage.set('lc2:tests', JSON.stringify(S.tests)); }
+  try{ await window.storage.set('lc2:tests:v3', JSON.stringify(S.tests)); }
   catch(e){ console.error(e); }
 }
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
@@ -1231,12 +1231,11 @@ const SEED_TESTS = [
   },
   {
     id: "t3",
-    name: "Little House Ch 13–14",
+    name: "Little House Ch 13–14: Vocab",
     subject: "Reading",
     date: "2026-03-30",
     createdAt: "2026-03-28T00:00:00.000Z",
     terms: [
-      // ── VOCABULARY ──
       {id:"t3-1",  term:"Bawl",         definition:"To shout or cry out loudly — also the noisy sound a cow or cattle makes"},
       {id:"t3-2",  term:"Bleat",        definition:"The sound made by a sheep or goat"},
       {id:"t3-3",  term:"Wattle",       definition:"To intertwine twigs or branches together to make a wall or fence"},
@@ -1247,17 +1246,25 @@ const SEED_TESTS = [
       {id:"t3-8",  term:"Squalled",     definition:"To cry noisily and continuously"},
       {id:"t3-9",  term:"Moccasins",    definition:"A soft, flat leather shoe historically worn by Native Americans"},
       {id:"t3-10", term:"Handkerchief", definition:"A square of cotton cloth carried in a pocket, used for blowing or wiping your nose"},
-      // ── STORY COMPREHENSION ──
-      {id:"t3-11", term:"What animal herd crossed the prairie in Ch 13?",  definition:"A huge herd of Texas Longhorn cattle — thousands of them, stretching as far as they could see"},
-      {id:"t3-12", term:"What did Pa tell the family to do when the cattle came?", definition:"Stay in the house and keep quiet so they would not spook the cattle and cause a stampede"},
-      {id:"t3-13", term:"What did Jack (the dog) do during the cattle crossing?", definition:"Pa tied Jack up so he would not run at the cattle and cause a stampede"},
-      {id:"t3-14", term:"How long did the cattle herd take to pass?", definition:"All day long — from morning until dark"},
-      {id:"t3-15", term:"What did the cowboys look like in Ch 13?",      definition:"They wore big hats and rode horses — they were driving the cattle herd north"},
-      {id:"t3-16", term:"What did the family find in Ch 14?",            definition:"An abandoned Indian camp with the remains of campfires, scattered bones, and left-behind items"},
-      {id:"t3-17", term:"What did Laura pick up at the Indian camp?",    definition:"Beads — she wanted to keep them but Ma made her put them back"},
-      {id:"t3-18", term:"Why did the Indians leave the camp?",           definition:"The tribe had moved on — they packed up and left, leaving their camp behind"},
-      {id:"t3-19", term:"How did Laura feel about the Indians?",         definition:"She was curious and wanted to see them — she was excited but also a little scared"},
-      {id:"t3-20", term:"What did Ma think about the Indian camp?",      definition:"She was uncomfortable and wanted to leave quickly — she did not want the children touching things"},
+    ]
+  },
+  {
+    id: "t3b",
+    name: "Little House Ch 13–14: Story Questions",
+    subject: "Reading",
+    date: "2026-03-30",
+    createdAt: "2026-03-28T00:00:00.000Z",
+    terms: [
+      {id:"t3b-1",  term:"What animal herd crossed the prairie in Ch 13?",       definition:"A huge herd of Texas Longhorn cattle — thousands of them, stretching as far as they could see"},
+      {id:"t3b-2",  term:"What did Pa tell the family to do when the cattle came?", definition:"Stay in the house and keep quiet so they would not spook the cattle and cause a stampede"},
+      {id:"t3b-3",  term:"What did Pa do with Jack the dog during the cattle crossing?", definition:"Pa tied Jack up so he would not run at the cattle and cause a stampede"},
+      {id:"t3b-4",  term:"How long did the cattle herd take to pass?",            definition:"All day long — from morning until dark"},
+      {id:"t3b-5",  term:"What did the cowboys look like in Ch 13?",              definition:"They wore big hats and rode horses — they were driving the cattle herd north"},
+      {id:"t3b-6",  term:"What did the family find in Ch 14?",                    definition:"An abandoned Indian camp with the remains of campfires, scattered bones, and left-behind items"},
+      {id:"t3b-7",  term:"What did Laura pick up at the Indian camp?",            definition:"Beads — she wanted to keep them but Ma made her put them back"},
+      {id:"t3b-8",  term:"Why did the Indians leave the camp?",                   definition:"The tribe had moved on — they packed up and left, leaving their camp behind"},
+      {id:"t3b-9",  term:"How did Laura feel about the Indians?",                 definition:"She was curious and wanted to see them — she was excited but also a little scared"},
+      {id:"t3b-10", term:"What did Ma think about the Indian camp?",              definition:"She was uncomfortable and wanted to leave quickly — she did not want the children touching things"},
     ]
   },
   {
