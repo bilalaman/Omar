@@ -901,11 +901,14 @@ function rQuiz(){
       <button class="tf-btn" id="tf-f" onclick="ansTF(false,${q.tfOk})">❌ False</button>
     </div>`;
   } else if(S.mode==='fill'){
-    body=`<div class="q-card">${x(q.term)}</div>
+    body=`<div class="q-card">
+      <div class="q-hint" style="font-size:13px;color:var(--muted);margin-bottom:10px;">What is the word for this definition?</div>
+      ${x(q.definition)}
+    </div>
     <div class="fill-area" id="fill-area">
-      <input type="text" id="fill-in" placeholder="Type the definition…"
-        onkeydown="if(event.key==='Enter')ansFill('${q.id}',${JSON.stringify(q.definition)})">
-      <button class="btn btn-primary" onclick="ansFill('${q.id}',${JSON.stringify(q.definition)})">Check Answer</button>
+      <input type="text" id="fill-in" placeholder="Type the word…"
+        onkeydown="if(event.key==='Enter')ansFill('${q.id}',${JSON.stringify(q.term)})">
+      <button class="btn btn-primary" onclick="ansFill('${q.id}',${JSON.stringify(q.term)})">Check Answer</button>
     </div>`;
   }
 
@@ -957,10 +960,10 @@ function ansTF(sel, isOk){
   showFeedback(ok, S.qs[S.qi]);
 }
 
-function ansFill(termId, correctDef){
+function ansFill(termId, correctAnswer){
   const inp=document.getElementById('fill-in');
   const ans=(inp?.value||'').trim().toLowerCase();
-  const ok=ans===correctDef.toLowerCase()||sim(ans,correctDef.toLowerCase())>.8;
+  const ok=ans===correctAnswer.toLowerCase()||sim(ans,correctAnswer.toLowerCase())>.8;
   if(ok) S.score++;
   S.answers.push({ok, term:S.qs[S.qi].term});
   if(inp) inp.disabled=true;
@@ -976,6 +979,8 @@ function showFeedback(ok, q){
   const nextLabel=isLast?'See My Results →':'Next Question →';
   const wrongMsg=S.mode==='tf'
     ? `The correct answer was <strong>${q.tfOk?'True':'False'}</strong>`
+    : S.mode==='fill'
+    ? `The word was: <strong>${q.term}</strong>`
     : `The correct answer was: <strong>${q.definition}</strong>`;
   const fb=document.createElement('div');
   fb.className='q-feedback '+(ok?'ok':'no');
