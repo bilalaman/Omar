@@ -901,14 +901,15 @@ function rQuiz(){
       <button class="tf-btn" id="tf-f" onclick="ansTF(false,${q.tfOk})">❌ False</button>
     </div>`;
   } else if(S.mode==='fill'){
+    // Store correct answer as data attribute to avoid quote-escaping in onclick
     body=`<div class="q-card">
       <div class="q-hint" style="font-size:13px;color:var(--muted);margin-bottom:10px;">What is the word for this definition?</div>
       ${x(q.definition)}
     </div>
-    <div class="fill-area" id="fill-area">
+    <div class="fill-area" id="fill-area" data-answer="${x(q.term)}">
       <input type="text" id="fill-in" placeholder="Type the word…"
-        onkeydown="if(event.key==='Enter')ansFill('${q.id}',${JSON.stringify(q.term)})">
-      <button class="btn btn-primary" onclick="ansFill('${q.id}',${JSON.stringify(q.term)})">Check Answer</button>
+        onkeydown="if(event.key==='Enter')ansFill()">
+      <button class="btn btn-primary" onclick="ansFill()">Check Answer</button>
     </div>`;
   }
 
@@ -960,8 +961,9 @@ function ansTF(sel, isOk){
   showFeedback(ok, S.qs[S.qi]);
 }
 
-function ansFill(termId, correctAnswer){
+function ansFill(){
   const inp=document.getElementById('fill-in');
+  const correctAnswer=document.getElementById('fill-area').dataset.answer;
   const ans=(inp?.value||'').trim().toLowerCase();
   const ok=ans===correctAnswer.toLowerCase()||sim(ans,correctAnswer.toLowerCase())>.8;
   if(ok) S.score++;
