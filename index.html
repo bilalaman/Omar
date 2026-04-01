@@ -509,7 +509,7 @@ const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 // ──────────────────────────────────────────────
 async function loadTests(){
   try{
-    const r = await window.storage.get('lc2:tests:v3');
+    const r = await window.storage.get('lc2:tests:v4');
     const parsed = JSON.parse(r.value);
     if(Array.isArray(parsed)) S.tests = parsed;
   } catch(e){
@@ -518,7 +518,7 @@ async function loadTests(){
   }
 }
 async function saveTests(){
-  try{ await window.storage.set('lc2:tests:v3', JSON.stringify(S.tests)); }
+  try{ await window.storage.set('lc2:tests:v4', JSON.stringify(S.tests)); }
   catch(e){ console.error(e); }
 }
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
@@ -1218,6 +1218,46 @@ const SEED_TESTS = [
       {id:"t1-10", term:"Learning a Language", definition:"An example of a learned behavior — something you are taught, not born knowing"},
       {id:"t1-11", term:"Dominant Trait",    definition:"A trait that shows up more often because it is stronger — it can hide other traits"},
       {id:"t1-12", term:"Recessive Trait",   definition:"A trait that is hidden when a dominant trait is present — it can skip generations"},
+    ]
+  },
+  {
+    id: "t1b",
+    name: "Inheritance & Traits: Reading",
+    subject: "Science",
+    date: "2026-04-01",
+    createdAt: "2026-03-28T00:00:00.000Z",
+    terms: [
+      // ── Handbook of Traits (seahorses) ──
+      {id:"t1b-1",  term:"What is the Handbook of Traits about?",
+                    definition:"It shows how traits can vary in animals — using seahorses that look different from each other as examples"},
+      {id:"t1b-2",  term:"Why do pygmy seahorses look like the coral they live on?",
+                    definition:"Their color and texture help them blend in — this is called camouflage, and it helps them hide from predators"},
+      {id:"t1b-3",  term:"Is camouflage color in seahorses an inherited trait or a learned behavior?",
+                    definition:"It is an inherited trait — the seahorse is born with the ability to match its surroundings, it did not learn it"},
+
+      // ── Scorpion Scientist ──
+      {id:"t1b-4",  term:"What do scientists study in Scorpion Scientist?",
+                    definition:"They study how scorpions of the same kind can look different from each other — they observe variation in traits"},
+      {id:"t1b-5",  term:"What is variation?",
+                    definition:"When living things of the same kind have differences in their traits — like scorpions that are different sizes or colors"},
+      {id:"t1b-6",  term:"How do scientists learn about animal traits?",
+                    definition:"They observe animals carefully, record what they see, and compare traits across many individuals"},
+
+      // ── How the Sparrow Learned Its Song ──
+      {id:"t1b-7",  term:"What is How the Sparrow Learned Its Song about?",
+                    definition:"It shows that sparrows must hear other sparrows sing to learn their song — the song is a learned behavior, not inherited"},
+      {id:"t1b-8",  term:"What happens if a baby sparrow never hears other sparrows sing?",
+                    definition:"It cannot learn the correct song — it will sing an incomplete or wrong version because the song must be learned, not inherited"},
+      {id:"t1b-9",  term:"Is a sparrow's song inherited or learned?",
+                    definition:"It is a learned behavior — the sparrow has to hear and practice the song from other sparrows to learn it"},
+
+      // ── The Code ──
+      {id:"t1b-10", term:"What is The Code about?",
+                    definition:"It is about DNA — the special code inside every living thing that carries instructions for inherited traits"},
+      {id:"t1b-11", term:"What is DNA?",
+                    definition:"A tiny code found inside every living cell that carries the instructions for what a living thing will look and be like"},
+      {id:"t1b-12", term:"How does DNA connect to inherited traits?",
+                    definition:"DNA is passed from parents to their offspring — it carries the instructions for traits like eye color, fur color, and body shape"},
     ]
   },
   {
