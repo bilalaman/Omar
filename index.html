@@ -509,7 +509,7 @@ const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 // ──────────────────────────────────────────────
 async function loadTests(){
   try{
-    const r = await window.storage.get('lc2:tests:v4');
+    const r = await window.storage.get('lc2:tests:v5');
     const parsed = JSON.parse(r.value);
     if(Array.isArray(parsed)) S.tests = parsed;
   } catch(e){
@@ -518,7 +518,7 @@ async function loadTests(){
   }
 }
 async function saveTests(){
-  try{ await window.storage.set('lc2:tests:v4', JSON.stringify(S.tests)); }
+  try{ await window.storage.set('lc2:tests:v5', JSON.stringify(S.tests)); }
   catch(e){ console.error(e); }
 }
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
@@ -1267,13 +1267,36 @@ const SEED_TESTS = [
     date: "2026-04-02",
     createdAt: "2026-03-01T00:00:00.000Z",
     terms: [
-      {id:"t2-1", term:"Market",           definition:"A place where people buy and sell things"},
-      {id:"t2-2", term:"Competition",       definition:"You can compete with other sellers by lowering your prices"},
-      {id:"t2-3", term:"Economy",           definition:"When you buy or sell something, you are part of the economy. It can be big or small"},
-      {id:"t2-4", term:"Goods",             definition:"Items that can be bought, sold, or traded (toys, food, clothing) — things you can see or touch"},
-      {id:"t2-5", term:"Services",          definition:"Tasks you pay someone to do for you (hair dresser, lawn care, house cleaning, face painting)"},
-      {id:"t2-6", term:"Free Market Economy", definition:"Where the choices are left to the buyer and the seller"},
-      {id:"t2-7", term:"Scarcity",          definition:"Farmers cannot grow as much as the customer wants — limited to what their crop can produce each year"},
+      // ── KEY VOCABULARY ──
+      {id:"t2-1",  term:"Market",
+                   definition:"Any place where buyers and sellers come together to trade"},
+      {id:"t2-2",  term:"Economy",
+                   definition:"All the businesses in a place — whenever you buy or sell something, you are part of the economy"},
+      {id:"t2-3",  term:"Goods",
+                   definition:"Items you can buy, use, see, or touch — like food, clothing, books, toys, or a house"},
+      {id:"t2-4",  term:"Services",
+                   definition:"A task that someone does for you — like face painting, cutting hair, or teaching. You do not keep a service like you keep a good"},
+      {id:"t2-5",  term:"Scarcity",
+                   definition:"When people want more of something than there is available — our wants are always greater than the resources to produce them"},
+      {id:"t2-6",  term:"Competition",
+                   definition:"When sellers try to get buyers to choose them instead of someone else — one way to compete is to lower your prices"},
+      {id:"t2-7",  term:"Free Market Economy",
+                   definition:"A type of economy where buyers and sellers make most of the choices — every person is free to decide what to buy, sell, or work"},
+      {id:"t2-8",  term:"Benefit",
+                   definition:"Something you gain by making a choice — a good choice is one where the benefits are greater than the costs"},
+      {id:"t2-9",  term:"Cost",
+                   definition:"Something you give up or lose by making a choice — every option has costs and benefits"},
+      // ── COMPREHENSION QUESTIONS ──
+      {id:"t2-10", term:"What is the difference between goods and services?",
+                   definition:"Goods are things you can touch and keep (food, toys). Services are tasks someone does for you (face painting, haircut) — you do not keep a service"},
+      {id:"t2-11", term:"Give an example of a good and a service from the farmers market.",
+                   definition:"A good: a bag of oranges or fruit. A service: face painting or visiting a petting zoo"},
+      {id:"t2-12", term:"Why are goods and services scarce?",
+                   definition:"Because farmers can only grow a certain amount each season — they can never grow enough for everyone to get as much as they want"},
+      {id:"t2-13", term:"What does a buyer think about before spending money?",
+                   definition:"The costs and benefits of each choice — a good choice is one where the benefits are greater than the costs"},
+      {id:"t2-14", term:"In a free market economy, who makes the choices?",
+                   definition:"The buyers and sellers make most of the choices — the government does not tell them what to buy, sell, or grow"},
     ]
   },
   {
